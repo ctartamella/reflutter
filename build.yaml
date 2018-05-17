@@ -1,0 +1,9 @@
+
+builders:
+  flutter_refit:
+    target: ":serializer_cli"
+    import: "package:flutter_refit/serializer_cli.dart"
+    builder_factories: ["refitSerializer"]
+    build_extensions: {".dart": [".rser.dart"]}
+    auto_apply: root_package
+    build_to: source
