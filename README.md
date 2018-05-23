@@ -1,4 +1,5 @@
 # flutter_refit
+
 ![Travis Builds](https://api.travis-ci.com/ctartamella/flutter_refit.svg?branch=master)
 
 A library for Dart developers.

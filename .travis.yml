@@ -2,5 +2,6 @@ language: dart
 dart:
   - dev
 dart_task:
-  - dartanalyzer: --fatal-warnings lib
-  - dartfmt
+  - flutter: packages pub run build_runner build --delete-conflicting-outputs
+  - dartanalyzer: --fatal-warnings .
+  - dartfmt:
