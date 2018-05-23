@@ -13,6 +13,7 @@ packages
 
 .dart_tool/
 .vscode/
+.packages
 
 # Include when developing application packages.
 pubspec.lock
