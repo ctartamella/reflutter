@@ -1,0 +1,25 @@
+name: flutter_refit
+description: A starting point for Dart libraries or applications.
+version: 0.0.1
+homepage: https://www.example.com
+author: Chris Tartamella <chris@tartamella.me>
+
+environment:
+  sdk: '>=2.0.0-dev.54 <2.0.0'
+
+executables:
+  refit_http:
+
+dependencies: 
+  jaguar_serializer: ^1.0.0-dev7
+
+dev_dependencies:
+  analyzer: ^0.31.1
+  build_runner: 0.8.8
+  jaguar_serializer_cli: ^1.0.0-dev8
+  test: ^0.12.38
+  flutter_refit_cli:
+    path: ../flutter_refit_cli
+
+refit_http:
+  - example/example.dart

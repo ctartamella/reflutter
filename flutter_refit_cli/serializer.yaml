@@ -1,0 +1,2 @@
+serializers:
+  - example/models/user.dart

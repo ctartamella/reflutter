@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "flutter_refit_cli",
+			"name": "flutter_refit_cli"
+		},
+		{
+			"path": "flutter_refit",
+			"name": "flutter_refit"
+		}
+	],
+	"settings": {}
+}
