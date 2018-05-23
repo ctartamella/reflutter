@@ -3,7 +3,8 @@ dart:
   - dev
 
 dart_task:
-  - flutter: packages pub run build_runner build --delete-conflicting-outputs
+  - pub: get
+  - pub: run build_runner build --delete-conflicting-outputs
   - dartanalyzer: --fatal-warnings --packages ./flutter_refit/.packages ./flutter_refit
   - dartanalyzer: --fatal-warnings --packages ./flutter_refit_cli/.packages ./flutter_refit_cli
   - dartfmt:
