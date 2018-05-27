@@ -45,8 +45,7 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
 
       _log.info('${b.name}: Found ${b.methods.build().length} methods.');      
     });
-    
-    final emitter = new DartEmitter(new Allocator.simplePrefixing());
+
     return new DartFormatter().format('${clazz.accept(new DartEmitter())}');
   }
 
