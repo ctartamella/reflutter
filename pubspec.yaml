@@ -1,6 +1,6 @@
 name: reflutter
 description: A library to generate HTTP API clients.
-version: 0.1.1
+version: 0.1.2
 homepage: https://www.github.com/ctartamella/flutter_refit
 author: Chris Tartamella <chris@tartamella.me>
 
