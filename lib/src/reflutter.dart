@@ -4,7 +4,8 @@ import 'package:jaguar_serializer/jaguar_serializer.dart';
 import 'package:meta/meta.dart';
 
 typedef FutureOr<ReflutterRequest> RequestInterceptor(ReflutterRequest request);
-typedef FutureOr<ReflutterResponse> ResponseInterceptor(ReflutterResponse response);
+typedef FutureOr<ReflutterResponse> ResponseInterceptor(
+    ReflutterResponse response);
 
 class ReflutterHttp {
   final String name;
@@ -62,9 +63,9 @@ class ReflutterResponse<T> {
   ReflutterResponse(this.body, this.rawResponse);
   ReflutterResponse.error(this.rawResponse) : body = null;
 
-  bool isSuccessful() => 
-    rawResponse.statusCode >= 200 && rawResponse.statusCode < 300;
-  
+  bool isSuccessful() =>
+      rawResponse.statusCode >= 200 && rawResponse.statusCode < 300;
+
   String toString() => "RefitResponse($body)";
 }
 
@@ -77,7 +78,7 @@ class ReflutterRequest<T> {
   ReflutterRequest({this.method, this.headers, this.body, this.url});
 
   Future<http.Response> send(http.Client client) async {
-    switch(method) {
+    switch (method) {
       case "POST":
         return client.post(url, headers: headers, body: body);
       case "PUT":
@@ -98,10 +99,11 @@ abstract class ReflutterApiDefinition {
   final http.Client client;
   final SerializerRepo serializers;
 
-  ReflutterApiDefinition(this.client, this.baseUrl, Map headers, SerializerRepo serializers)
-    : headers = headers ?? {'content-type': 'application/json'},
-      serializers = serializers ?? new JsonRepo();
-    
+  ReflutterApiDefinition(
+      this.client, this.baseUrl, Map headers, SerializerRepo serializers)
+      : headers = headers ?? {'content-type': 'application/json'},
+        serializers = serializers ?? new JsonRepo();
+
   final List<RequestInterceptor> requestInterceptors = [];
   final List<ResponseInterceptor> responseInterceptors = [];
 
@@ -114,7 +116,8 @@ abstract class ReflutterApiDefinition {
   }
 
   @protected
-  FutureOr<ReflutterResponse> interceptResponse(ReflutterResponse response) async {
+  FutureOr<ReflutterResponse> interceptResponse(
+      ReflutterResponse response) async {
     for (var i in responseInterceptors) {
       response = i(response);
     }

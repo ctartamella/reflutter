@@ -56,4 +56,5 @@ Reference get kStringType => refer("String");
 
 Reference get kMapType => refer("Map");
 
-Reference get kSerializerType => refer("SerializerRepo", "package/jaguar_serializer/jaguar_serializer.dart");
+Reference get kSerializerType =>
+    refer("SerializerRepo", "package/jaguar_serializer/jaguar_serializer.dart");

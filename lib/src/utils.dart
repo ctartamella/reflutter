@@ -5,4 +5,4 @@ bool responseSuccessful(http.Response response) =>
     response.statusCode >= 200 && response.statusCode < 300;
 
 String paramsToQueryUri(Map<String, String> params) =>
-http_utils.mapToQuery(params);
+    http_utils.mapToQuery(params);

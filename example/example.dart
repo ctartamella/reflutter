@@ -26,5 +26,6 @@ abstract class ApiDefinition {
   Future<ReflutterResponse> deleteUser(@Param() String id);
 
   @Get("/users")
-  Future<ReflutterResponse<List<User>>> search(@QueryParam("n") String name, @QueryParam("e") String email);
+  Future<ReflutterResponse<List<User>>> search(
+      @QueryParam("n") String name, @QueryParam("e") String email);
 }

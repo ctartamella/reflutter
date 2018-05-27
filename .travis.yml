@@ -2,12 +2,18 @@ language: dart
 dart:
   - dev
 
-dart_task:
-  - dartanalyzer: --fatal-warnings .
-  - dartfmt:
+jobs:
+  include:
+    - stage: codegen
+      script: pub run build_runner build --delete-conflicting-outputs
+    - stage: analyze_and_format
+      script: dartanalyzer --fatal-warnings .
+    - stage: analyze_and_format
+      script: dartfmt --set-exit-if-changed .
+    - stage: deploy
+      script: bash ./tool/publish.sh
 
-before_script:
-  - pub run build_runner build --delete-conflicting-outputs
-
-after_success:
-  - bash ./tool/publish.sh
+stages:
+  - codegen
+  - analyze_and_format
+  - deploy
