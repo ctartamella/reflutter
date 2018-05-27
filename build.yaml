@@ -1,8 +1,8 @@
 # Read about `build.yaml` at https://pub.dartlang.org/packages/build_config
 builders:
-  flutter_refit_cli:
-    target: ":flutter_refit_cli"
-    import: "package:flutter_refit_cli/flutter_refit_cli.dart"
+  flutter_refit:
+    target: ":flutter_refit"
+    import: "package:flutter_refit/flutter_refit.dart"
     builder_factories: ["refitHttpPartBuilder"]
     build_extensions: {".dart": [".jser.dart"]}
     auto_apply: root_package
