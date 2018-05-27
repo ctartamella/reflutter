@@ -3,7 +3,6 @@ dart:
   - dev
 
 dart_task:
-  - pub: get
   - pub: run build_runner build --delete-conflicting-outputs
   - dartanalyzer: --fatal-warnings
   - dartfmt:
