@@ -3,13 +3,11 @@ dart:
   - dev
 
 dart_task:
-  - pub: run build_runner build --delete-conflicting-outputs
   - dartanalyzer: --fatal-warnings .
   - dartfmt:
 
-deploy:
-  provider: script
-  script: bash ./tool/publish.sh
-  skip_cleanup: true
-  on:
-    branch: release
+before_script:
+  - pub run build_runner build --delete-conflicting-outputs
+
+after_success:
+  - ./tool/publish.sh
