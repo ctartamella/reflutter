@@ -4,6 +4,7 @@
 library flutter_refit;
 
 export 'refit/refit.dart';
+export 'refit/utils.dart';
 
 import 'package:build/build.dart';
 import 'package:source_gen/source_gen.dart';

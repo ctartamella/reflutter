@@ -4,7 +4,7 @@ dart:
 
 dart_task:
   - pub: run build_runner build --delete-conflicting-outputs
-  - dartanalyzer: --fatal-warnings
+  - dartanalyzer: --fatal-warnings .
   - dartfmt:
 
 deploy:

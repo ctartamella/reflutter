@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:analyzer/analyzer.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:build/build.dart';
@@ -139,7 +138,7 @@ class JaguarHttpGenerator extends GeneratorForAnnotation<RefitHttp> {
         .stringValue}";
     Map query = <String, String>{};
     method.parameters?.forEach((ParameterElement p) {
-      if (p.parameterKind == ParameterKind.POSITIONAL) {
+      if (p.isPositional) {
         final pAnnot = _getParamAnnotation(p);
         if (pAnnot != null) {
           String key = ":${pAnnot
@@ -147,7 +146,7 @@ class JaguarHttpGenerator extends GeneratorForAnnotation<RefitHttp> {
               ?.stringValue ?? p.name}";
           value = value.replaceFirst(key, "\${${p.name}}");
         }
-      } else if (p.parameterKind == ParameterKind.NAMED) {
+      } else if (p.isNamed) {
         final pAnnot = _getQueryParamAnnotation(p);
         if (pAnnot != null) {
           query[pAnnot?.peek("name")?.stringValue ?? p.name] = p.name;
