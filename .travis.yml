@@ -9,6 +9,6 @@ dart_task:
 
 deploy:
   provider: script
-  script: pub publish
+  script: ./tool/publish.sh
   on:
     branch: release
