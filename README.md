@@ -1,6 +1,7 @@
 # Reflutter
 
-![Travis Builds](https://api.travis-ci.com/ctartamella/flutter_refit.svg?branch=master)
+![Travis Dev Builds](https://api.travis-ci.com/ctartamella/reflutter.svg?branch=master)
+![Travis Release Builds](https://api.travis-ci.com/ctartamella/reflutter.svg?branch=release)
 
 Reflutter is a simple Dart library for automatically generating HTTP clients from
 simple metadata.  It borrows heavily from the [jaguar_http](https://github.com/jaguar-dart/jaguar_http)
