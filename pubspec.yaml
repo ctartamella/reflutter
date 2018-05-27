@@ -1,6 +1,6 @@
-name: flutter_refit
+name: reflutter
 description: A library to generate HTTP API clients.
-version: 0.1.0
+version: 0.1.1
 homepage: https://www.github.com/ctartamella/flutter_refit
 author: Chris Tartamella <chris@tartamella.me>
 
@@ -25,5 +25,5 @@ dev_dependencies:
   jaguar_serializer_cli: ^1.0.0-dev8
   test: ^0.12.38
 
-refit_http:
+reflutter:
   - example/example.dart

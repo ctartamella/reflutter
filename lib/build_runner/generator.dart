@@ -7,16 +7,16 @@ import 'package:dart_style/dart_style.dart';
 import 'package:logging/logging.dart';
 import 'package:source_gen/source_gen.dart';
 import 'package:code_builder/code_builder.dart' as builder;
-import 'package:flutter_refit/flutter_refit.dart';
+import '../reflutter.dart';
 import "utils.dart";
 
-final Logger _log = new Logger("RefitHttpGenerator");
+final Logger _log = new Logger("ReflutterHttpGenerator");
 
-class JaguarHttpGenerator extends GeneratorForAnnotation<RefitHttp> {
+class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
 
   final _methodsAnnotations = const [Get, Post, Delete, Put, Patch];
 
-  const JaguarHttpGenerator(); 
+  const ReflutterHttpGenerator(); 
 
   Future<String> generateForAnnotatedElement(
       Element element, ConstantReader annotation, BuildStep buildStep) async {
@@ -32,7 +32,7 @@ class JaguarHttpGenerator extends GeneratorForAnnotation<RefitHttp> {
 
     var clazz = new builder.Class((b) {
       b..name = annotation?.peek("name")?.stringValue ?? "${friendlyName}Impl"
-       ..extend = builder.refer("$RefitApiDefinition")
+       ..extend = builder.refer("$ReflutterApiDefinition")
        ..implements.add(builder.refer(friendlyName))
        ..constructors.add(_generateConstructor());      
 
@@ -46,6 +46,7 @@ class JaguarHttpGenerator extends GeneratorForAnnotation<RefitHttp> {
       _log.info('${b.name}: Found ${b.methods.build().length} methods.');      
     });
     
+    final emitter = new DartEmitter(new Allocator.simplePrefixing());
     return new DartFormatter().format('${clazz.accept(new DartEmitter())}');
   }
 
@@ -187,7 +188,7 @@ class JaguarHttpGenerator extends GeneratorForAnnotation<RefitHttp> {
       }
     });
 
-    return kJaguarRequestRef.newInstance([], params).assignVar(kRequest);
+    return kReflutterRequestRef.newInstance([], params).assignVar(kRequest);
   }
 
   builder.Expression _generateInterceptRequest() =>
@@ -202,10 +203,10 @@ class JaguarHttpGenerator extends GeneratorForAnnotation<RefitHttp> {
   builder.Expression _generateResponseProcess(MethodElement method) {
     var block = new builder.Block.of([
       const builder.Code('if (responseSuccessful(rawResponse)) {'),
-      const builder.Code('  response = new RefitResponse('),
+      const builder.Code('  response = new ReflutterResponse('),
       const builder.Code('      serializers.deserialize(rawResponse.body, type: User), rawResponse);'),
       const builder.Code('} else {'),
-      const builder.Code('  response = new RefitResponse.error(rawResponse);'),
+      const builder.Code('  response = new ReflutterResponse.error(rawResponse);'),
       const builder.Code('}')
     ]);
 

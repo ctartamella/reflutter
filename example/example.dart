@@ -1,29 +1,30 @@
-library flutter_refit.example;
+library reflutter.example;
 
 import 'dart:async';
 import 'package:http/http.dart';
 import 'package:jaguar_serializer/jaguar_serializer.dart';
-import '../lib/flutter_refit.dart';
+
+import '../lib/reflutter.dart';
 import 'models/user.dart';
 
 part 'example.api.dart';
 
 /// definition
-@RefitHttp(name: "Api")
+@ReflutterHttp(name: "Api")
 abstract class ApiDefinition {
   @Get("/users/:id")
-  Future<RefitResponse<User>> getUserById(@Param() String id);
+  Future<ReflutterResponse<User>> getUserById(@Param() String id);
 
   @Post("/users")
-  Future<RefitResponse<User>> postUser(@Body() User user);
+  Future<ReflutterResponse<User>> postUser(@Body() User user);
 
   @Put("/users/:uid")
-  Future<RefitResponse<User>> updateUser(
+  Future<ReflutterResponse<User>> updateUser(
       @Param("uid") String userId, @Body() User user);
 
   @Delete("/users/:id")
-  Future<RefitResponse> deleteUser(@Param() String id);
+  Future<ReflutterResponse> deleteUser(@Param() String id);
 
   @Get("/users")
-  Future<RefitResponse<List<User>>> search(@QueryParam("n") String name, @QueryParam("e") String email);
+  Future<ReflutterResponse<List<User>>> search(@QueryParam("n") String name, @QueryParam("e") String email);
 }

@@ -1,18 +1,18 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of flutter_refit.example;
+part of reflutter.example;
 
 // **************************************************************************
-// Generator: JaguarHttpGenerator
+// Generator: ReflutterHttpGenerator
 // **************************************************************************
 
-class Api extends RefitApiDefinition implements ApiDefinition {
+class Api extends ReflutterApiDefinition implements ApiDefinition {
   Api(Client client, String baseUrl, Map headers, SerializerRepo serializers)
       : super(client, baseUrl, headers, serializers);
 
-  Future<RefitResponse<User>> getUserById(String id) async {
-    final url = '$baseUrl/users/:id';
-    var request = new RefitRequest(
+  Future<ReflutterResponse<User>> getUserById(String id) async {
+    final url = '$baseUrl/users/${id}';
+    var request = new ReflutterRequest(
         method: 'GET',
         url: url,
         headers: headers,
@@ -21,19 +21,19 @@ class Api extends RefitApiDefinition implements ApiDefinition {
     final rawResponse = await request.send(client);
     var response = null;
     if (responseSuccessful(rawResponse)) {
-      response = new RefitResponse(
+      response = new ReflutterResponse(
           serializers.deserialize(rawResponse.body, type: User), rawResponse);
     } else {
-      response = new RefitResponse.error(rawResponse);
+      response = new ReflutterResponse.error(rawResponse);
     }
     ;
     response = await interceptResponse(response);
     return response;
   }
 
-  Future<RefitResponse<User>> postUser(User user) async {
+  Future<ReflutterResponse<User>> postUser(User user) async {
     final url = '$baseUrl/users';
-    var request = new RefitRequest(
+    var request = new ReflutterRequest(
         method: 'POST',
         url: url,
         headers: headers,
@@ -42,19 +42,19 @@ class Api extends RefitApiDefinition implements ApiDefinition {
     final rawResponse = await request.send(client);
     var response = null;
     if (responseSuccessful(rawResponse)) {
-      response = new RefitResponse(
+      response = new ReflutterResponse(
           serializers.deserialize(rawResponse.body, type: User), rawResponse);
     } else {
-      response = new RefitResponse.error(rawResponse);
+      response = new ReflutterResponse.error(rawResponse);
     }
     ;
     response = await interceptResponse(response);
     return response;
   }
 
-  Future<RefitResponse<User>> updateUser(String userId, User user) async {
-    final url = '$baseUrl/users/:uid';
-    var request = new RefitRequest(
+  Future<ReflutterResponse<User>> updateUser(String userId, User user) async {
+    final url = '$baseUrl/users/${userId}';
+    var request = new ReflutterRequest(
         method: 'PUT',
         url: url,
         headers: headers,
@@ -63,19 +63,19 @@ class Api extends RefitApiDefinition implements ApiDefinition {
     final rawResponse = await request.send(client);
     var response = null;
     if (responseSuccessful(rawResponse)) {
-      response = new RefitResponse(
+      response = new ReflutterResponse(
           serializers.deserialize(rawResponse.body, type: User), rawResponse);
     } else {
-      response = new RefitResponse.error(rawResponse);
+      response = new ReflutterResponse.error(rawResponse);
     }
     ;
     response = await interceptResponse(response);
     return response;
   }
 
-  Future<RefitResponse<dynamic>> deleteUser(String id) async {
-    final url = '$baseUrl/users/:id';
-    var request = new RefitRequest(
+  Future<ReflutterResponse<dynamic>> deleteUser(String id) async {
+    final url = '$baseUrl/users/${id}';
+    var request = new ReflutterRequest(
         method: 'DELETE',
         url: url,
         headers: headers,
@@ -84,19 +84,20 @@ class Api extends RefitApiDefinition implements ApiDefinition {
     final rawResponse = await request.send(client);
     var response = null;
     if (responseSuccessful(rawResponse)) {
-      response = new RefitResponse(
+      response = new ReflutterResponse(
           serializers.deserialize(rawResponse.body, type: User), rawResponse);
     } else {
-      response = new RefitResponse.error(rawResponse);
+      response = new ReflutterResponse.error(rawResponse);
     }
     ;
     response = await interceptResponse(response);
     return response;
   }
 
-  Future<RefitResponse<List<User>>> search(String name, String email) async {
+  Future<ReflutterResponse<List<User>>> search(
+      String name, String email) async {
     final url = '$baseUrl/users';
-    var request = new RefitRequest(
+    var request = new ReflutterRequest(
         method: 'GET',
         url: url,
         headers: headers,
@@ -105,10 +106,10 @@ class Api extends RefitApiDefinition implements ApiDefinition {
     final rawResponse = await request.send(client);
     var response = null;
     if (responseSuccessful(rawResponse)) {
-      response = new RefitResponse(
+      response = new ReflutterResponse(
           serializers.deserialize(rawResponse.body, type: User), rawResponse);
     } else {
-      response = new RefitResponse.error(rawResponse);
+      response = new ReflutterResponse.error(rawResponse);
     }
     ;
     response = await interceptResponse(response);

@@ -12,8 +12,8 @@ const String kBody = "body";
 const String kMethod = "method";
 const String kSerializeMethod = "serialize";
 const String kDeserializeMethod = "deserialize";
-const String kJaguarRequest = "RefitRequest";
-const String kJaguarResponse = "RefitResponse";
+const String kReflutterRequest = "ReflutterRequest";
+const String kReflutterResponse = "ReflutterResponse";
 const String kInterceptReq = "interceptRequest";
 const String kInterceptRes = "interceptResponse";
 const String kSendMethod = "send";
@@ -36,9 +36,9 @@ Reference get kResponseRef => refer(kResponse);
 
 Reference get kRequestRef => refer(kRequest);
 
-Reference get kJaguarRequestRef => refer(kJaguarRequest);
+Reference get kReflutterRequestRef => refer(kReflutterRequest);
 
-Reference get kJaguarResponseRef => refer(kJaguarResponse);
+Reference get kReflutterResponseRef => refer(kReflutterResponse);
 
 Reference get kInterceptReqRef => refer(kInterceptReq);
 
@@ -50,10 +50,10 @@ Reference get kRawResponseBodyRef => refer("$kRawResponse.$kBody");
 
 Reference get kResponseSuccessfulRef => refer(kResponseSuccessful);
 
-TypeReference get kHttpClientType => new TypeReference((b) => b.symbol = "Client");
+Reference get kHttpClientType => refer("Client", "package:http/http.dart");
 
-TypeReference get kStringType => new TypeReference((b) => b.symbol = "String");
+Reference get kStringType => refer("String");
 
-TypeReference get kMapType => new TypeReference((b) => b.symbol = "Map");
+Reference get kMapType => refer("Map");
 
-TypeReference get kSerializerType => new TypeReference((b) => b.symbol = "SerializerRepo");
+Reference get kSerializerType => refer("SerializerRepo", "package/jaguar_serializer/jaguar_serializer.dart");

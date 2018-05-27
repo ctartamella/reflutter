@@ -3,13 +3,13 @@ import 'package:http/http.dart' as http;
 import 'package:jaguar_serializer/jaguar_serializer.dart';
 import 'package:meta/meta.dart';
 
-typedef FutureOr<RefitRequest> RequestInterceptor(RefitRequest request);
-typedef FutureOr<RefitResponse> ResponseInterceptor(RefitResponse response);
+typedef FutureOr<ReflutterRequest> RequestInterceptor(ReflutterRequest request);
+typedef FutureOr<ReflutterResponse> ResponseInterceptor(ReflutterResponse response);
 
-class RefitHttp {
+class ReflutterHttp {
   final String name;
 
-  const RefitHttp({this.name});
+  const ReflutterHttp({this.name});
 }
 
 class Req {
@@ -55,12 +55,12 @@ class Patch extends Req {
   const Patch([String url = "/"]) : super("PATCH", url);
 }
 
-class RefitResponse<T> {
+class ReflutterResponse<T> {
   final T body;
   final http.Response rawResponse;
 
-  RefitResponse(this.body, this.rawResponse);
-  RefitResponse.error(this.rawResponse) : body = null;
+  ReflutterResponse(this.body, this.rawResponse);
+  ReflutterResponse.error(this.rawResponse) : body = null;
 
   bool isSuccessful() => 
     rawResponse.statusCode >= 200 && rawResponse.statusCode < 300;
@@ -68,13 +68,13 @@ class RefitResponse<T> {
   String toString() => "RefitResponse($body)";
 }
 
-class RefitRequest<T> {
+class ReflutterRequest<T> {
   T body;
   String method;
   String url;
   Map<String, String> headers;
 
-  RefitRequest({this.method, this.headers, this.body, this.url});
+  ReflutterRequest({this.method, this.headers, this.body, this.url});
 
   Future<http.Response> send(http.Client client) async {
     switch(method) {
@@ -92,13 +92,13 @@ class RefitRequest<T> {
   }
 }
 
-abstract class RefitApiDefinition {
+abstract class ReflutterApiDefinition {
   final String baseUrl;
   final Map headers;
   final http.Client client;
   final SerializerRepo serializers;
 
-  RefitApiDefinition(this.client, this.baseUrl, Map headers, SerializerRepo serializers)
+  ReflutterApiDefinition(this.client, this.baseUrl, Map headers, SerializerRepo serializers)
     : headers = headers ?? {'content-type': 'application/json'},
       serializers = serializers ?? new JsonRepo();
     
@@ -106,7 +106,7 @@ abstract class RefitApiDefinition {
   final List<ResponseInterceptor> responseInterceptors = [];
 
   @protected
-  FutureOr<RefitRequest> interceptRequest(RefitRequest request) async {
+  FutureOr<ReflutterRequest> interceptRequest(ReflutterRequest request) async {
     for (var i in requestInterceptors) {
       request = await i(request);
     }
@@ -114,7 +114,7 @@ abstract class RefitApiDefinition {
   }
 
   @protected
-  FutureOr<RefitResponse> interceptResponse(RefitResponse response) async {
+  FutureOr<ReflutterResponse> interceptResponse(ReflutterResponse response) async {
     for (var i in responseInterceptors) {
       response = i(response);
     }
