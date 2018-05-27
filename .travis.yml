@@ -9,7 +9,7 @@ dart_task:
 
 deploy:
   provider: script
-  script: ./tool/publish.sh
+  script: bash ./tool/publish.sh
   skip_cleanup: true
   on:
     branch: release
