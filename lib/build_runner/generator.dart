@@ -225,17 +225,28 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
       .assignFinal(kRawResponse);
 
   builder.Expression _generateResponseProcess(MethodElement method) {
+    final responseType = _getResponseType(method.returnType);
+
     var block = new builder.Block.of([
       const builder.Code('if (responseSuccessful(rawResponse)) {'),
       const builder.Code('  response = new ReflutterResponse('),
-      const builder.Code(
-          '      serializers.deserialize(rawResponse.body, type: User), rawResponse);'),
+      new builder.Code('      serializers.deserialize(rawResponse.body, type: ${responseType?.name}), rawResponse);'),
       const builder.Code('} else {'),
-      const builder.Code(
-          '  response = new ReflutterResponse.error(rawResponse);'),
+      const builder.Code('  response = new ReflutterResponse.error(rawResponse);'),
       const builder.Code('}')
     ]);
 
     return new builder.CodeExpression(block);
   }
+
+  DartType _getResponseType(DartType type) {
+    final generic = _genericOf(type);
+    if (generic == null) {
+      return type;
+    }
+    if (generic.isDynamic) {
+      return null;
+    }
+    return _getResponseType(generic);
+}
 }
