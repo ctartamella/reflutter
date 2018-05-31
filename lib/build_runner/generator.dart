@@ -230,9 +230,11 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
     var block = new builder.Block.of([
       const builder.Code('if (responseSuccessful(rawResponse)) {'),
       const builder.Code('  response = new ReflutterResponse('),
-      new builder.Code('      serializers.deserialize(rawResponse.body, type: ${responseType?.name}), rawResponse);'),
+      new builder.Code(
+          '      serializers.deserialize(rawResponse.body, type: ${responseType?.name}), rawResponse);'),
       const builder.Code('} else {'),
-      const builder.Code('  response = new ReflutterResponse.error(rawResponse);'),
+      const builder.Code(
+          '  response = new ReflutterResponse.error(rawResponse);'),
       const builder.Code('}')
     ]);
 
@@ -248,5 +250,5 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
       return null;
     }
     return _getResponseType(generic);
-}
+  }
 }
