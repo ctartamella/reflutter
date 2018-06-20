@@ -4,9 +4,12 @@ import 'package:jaguar_serializer/jaguar_serializer.dart';
 import 'package:meta/meta.dart';
 
 /// Typedef to define a [RequestInterceptor] method.
-typedef RequestInterceptor = FutureOr<ReflutterRequest> Function(ReflutterRequest request);
+typedef RequestInterceptor = FutureOr<ReflutterRequest> Function(
+    ReflutterRequest request);
+
 /// Typedef to define a [ResponseInterceptor] method.
-typedef ResponseInterceptor = FutureOr<ReflutterResponse> Function(ReflutterResponse response);
+typedef ResponseInterceptor = FutureOr<ReflutterResponse> Function(
+    ReflutterResponse response);
 
 /// The main HTTP API defintion annotation.  This should be used
 /// to designate a class that should be processed by Reflutter's
@@ -15,7 +18,7 @@ class ReflutterHttp {
   /// The name of the API class that will be created.
   final String name;
 
-  /// The default constructor.  
+  /// The default constructor.
   /// [name] -  Any string to define the name of your API.
   const ReflutterHttp({this.name});
 }
@@ -26,6 +29,7 @@ class _Req {
 
   const _Req(this.method, this.url);
 }
+
 /// Defines an annotation to specify a parameter to be taken from the header
 class Param {
   /// The name of the parameter.
@@ -98,7 +102,7 @@ class ReflutterResponse<T> {
   /// Generate a response for the given body and raw HTTP response.
   ReflutterResponse(this._body, this._rawResponse);
 
-  /// Generates a response indicating an error condition 
+  /// Generates a response indicating an error condition
   /// with the given response.
   ReflutterResponse.error(this._rawResponse) : _body = null;
 
@@ -115,10 +119,13 @@ class ReflutterResponse<T> {
 class ReflutterRequest<T> {
   /// The wrapped body object.
   final T body;
+
   /// The method used for the API call such as Get, Post, etc.
   final String method;
+
   /// The url of the API call.
   final String url;
+
   /// Any headers being sent during the call.
   final Map<String, String> headers;
 
@@ -143,19 +150,22 @@ class ReflutterRequest<T> {
   }
 }
 
-/// The base class for all API definition objects.  This is used by 
+/// The base class for all API definition objects.  This is used by
 /// generated code and is not neccessarily meant for public use.  When
-/// implementors decorate a class with the [ReflutterHttp] attribute, a 
-/// partial instance of that class is generated which subclasses this 
-/// class.  Base class methods from this will be used to generate the 
+/// implementors decorate a class with the [ReflutterHttp] attribute, a
+/// partial instance of that class is generated which subclasses this
+/// class.  Base class methods from this will be used to generate the
 /// backing methods.
 abstract class ReflutterApiDefinition {
   /// The base URL for the REST api.
   final String baseUrl;
+
   /// Headers to be sent along with each request.
   final Map headers;
+
   /// The HTTP client which will be used for connections.
   final http.Client client;
+
   /// The JSON serializer to use for request and response serialization.
   final SerializerRepo serializers;
 
@@ -165,19 +175,19 @@ abstract class ReflutterApiDefinition {
       : headers = headers ?? {'content-type': 'application/json'},
         serializers = serializers ?? new JsonRepo();
 
-  /// The [List] of [RequestInterceptor] objects to use when 
+  /// The [List] of [RequestInterceptor] objects to use when
   /// processing requests.
   final List<RequestInterceptor> requestInterceptors = [];
 
-  /// The [List] of [ResponseInterceptor] objects to use when 
+  /// The [List] of [ResponseInterceptor] objects to use when
   /// processing requests.
   final List<ResponseInterceptor> responseInterceptors = [];
 
   /// Allows for requests to be intercepted prior to submission to the REST
   /// endpoint. This can be used to supplement a request with data, for instance
   /// injecting bearer tokens or other authentication.
-  /// 
-  /// Calls all [RequestInterceptor] objects that have been added to 
+  ///
+  /// Calls all [RequestInterceptor] objects that have been added to
   /// [this.requestInterceptor] at the time of the request.  Each successive
   /// call gets the object as returned from the previous [RequestInterceptor]
   /// and is similar to a pipeline.
@@ -193,13 +203,14 @@ abstract class ReflutterApiDefinition {
   /// Allows for responses to be intercepted prior to processing of the data.
   /// This can be used to add custom error handling or logging or any number
   /// of post-response actions as needed by the user.
-  /// 
-  /// Calls all [ResponseInterceptor] objects that have been added to 
+  ///
+  /// Calls all [ResponseInterceptor] objects that have been added to
   /// [this.responseInterceptor] at the time of the response.  Each successive
   /// call gets the object as returned from the previous [ResponseInterceptor]
   /// and is similar to a pipeline.
   @protected
-  FutureOr<ReflutterResponse> interceptResponse(ReflutterResponse response) async {
+  FutureOr<ReflutterResponse> interceptResponse(
+      ReflutterResponse response) async {
     var localresponse = response;
     for (var i in responseInterceptors) {
       localresponse = i(localresponse);

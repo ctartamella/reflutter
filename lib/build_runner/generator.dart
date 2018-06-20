@@ -39,8 +39,7 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
       _log.info('Processing ${classElement.methods.length} methods.');
 
       for (var m in classElement.methods) {
-        if (m != null) 
-          b.methods.add(_generateMethod(m));
+        if (m != null) b.methods.add(_generateMethod(m));
       }
 
       _log.info('${b.name}: Found ${b.methods.build().length} methods.');
@@ -62,7 +61,8 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
 
     final override = new builder.Block.of([const builder.Code('override')]);
     return new builder.Method((b) {
-      b..name = m.name
+      b
+        ..name = m.name
         ..returns = _genericTypeBuilder(m.returnType)
         ..modifier = builder.MethodModifier.async
         ..body = _generateMethodBlock(m, methodAnnot)
@@ -80,10 +80,9 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
   TypeChecker _typeChecker(Type type) => new TypeChecker.fromRuntime(type);
 
   DartType _genericOf(DartType type) =>
-    type is InterfaceType && type.typeArguments.isNotEmpty
-        ? type.typeArguments.first
-        : null;
-
+      type is InterfaceType && type.typeArguments.isNotEmpty
+          ? type.typeArguments.first
+          : null;
 
   TypeReference _genericTypeBuilder(DartType type) {
     final generic = _genericOf(type);
@@ -97,9 +96,9 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
 
   ConstantReader _getMethodAnnotation(MethodElement method) {
     for (final type in _methodsAnnotations) {
-      final annot = _typeChecker(type).firstAnnotationOf(method, throwOnUnresolved: false);
-      if (annot != null) 
-        return new ConstantReader(annot);
+      final annot = _typeChecker(type)
+          .firstAnnotationOf(method, throwOnUnresolved: false);
+      if (annot != null) return new ConstantReader(annot);
     }
     return null;
   }
@@ -188,7 +187,8 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
     return builder.literal('\$$kBaseUrl$value').assignFinal(kUrl);
   }
 
-  builder.Expression _generateVarResponse() => builder.literalNull.assignVar(kResponse);
+  builder.Expression _generateVarResponse() =>
+      builder.literalNull.assignVar(kResponse);
 
   builder.Expression _generateRequest(
       MethodElement method, ConstantReader annot) {
