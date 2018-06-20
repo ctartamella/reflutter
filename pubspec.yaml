@@ -1,7 +1,7 @@
 name: reflutter
 description: A library to generate HTTP API clients.
 homepage: https://www.github.com/ctartamella/reflutter
-version: 0.2.0+1
+version: 0.2.1
 author: Chris Tartamella <chris@tartamella.me>
 
 environment:

@@ -1,8 +1,16 @@
-import 'package:http/http.dart' as http;
-import 'package:http/src/utils.dart' as http_utils;
+import 'package:http/http.dart';
 
-bool responseSuccessful(http.Response response) =>
+/// Test whether the given [Response] body indicates success.
+bool responseSuccessful(Response response) =>
     response.statusCode >= 200 && response.statusCode < 300;
 
-String paramsToQueryUri(Map<String, String> params) =>
-    http_utils.mapToQuery(params);
+/// Convert a [Map<String, String>] to a formatted query
+/// string for use in a URL.
+String paramsToQueryUri(Map<String, String> params) {
+  final pairs = <List<String>>[];
+  params.forEach((key, value) =>
+      pairs.add([Uri.encodeQueryComponent(key), Uri.encodeQueryComponent(value)]));
+
+  return pairs.map((pair) => '${pair[0]}=${pair[1]}').join('&');
+}
+

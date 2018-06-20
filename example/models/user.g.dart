@@ -3,7 +3,7 @@
 part of flutter_refit.user;
 
 // **************************************************************************
-// Generator: JaguarSerializerGenerator
+// JaguarSerializerGenerator
 // **************************************************************************
 
 abstract class _$UserSerializer implements Serializer<User> {

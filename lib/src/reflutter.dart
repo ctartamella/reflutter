@@ -3,89 +3,139 @@ import 'package:http/http.dart' as http;
 import 'package:jaguar_serializer/jaguar_serializer.dart';
 import 'package:meta/meta.dart';
 
-typedef FutureOr<ReflutterRequest> RequestInterceptor(ReflutterRequest request);
-typedef FutureOr<ReflutterResponse> ResponseInterceptor(
-    ReflutterResponse response);
+/// Typedef to define a [RequestInterceptor] method.
+typedef RequestInterceptor = FutureOr<ReflutterRequest> Function(ReflutterRequest request);
+/// Typedef to define a [ResponseInterceptor] method.
+typedef ResponseInterceptor = FutureOr<ReflutterResponse> Function(ReflutterResponse response);
 
+/// The main HTTP API defintion annotation.  This should be used
+/// to designate a class that should be processed by Reflutter's
+/// code generation scripts.
 class ReflutterHttp {
+  /// The name of the API class that will be created.
   final String name;
 
+  /// The default constructor.  
+  /// [name] -  Any string to define the name of your API.
   const ReflutterHttp({this.name});
 }
 
-class Req {
+class _Req {
   final String method;
   final String url;
 
-  const Req(this.method, this.url);
+  const _Req(this.method, this.url);
 }
-
+/// Defines an annotation to specify a parameter to be taken from the header
 class Param {
+  /// The name of the parameter.
   final String name;
 
+  /// The default constructor.  Takes the parameter name as an argument.
   const Param([this.name]);
 }
 
+/// Defines a method parameter as coming from the query string.
 class QueryParam {
+  /// The name of the parameter in the query string.
   final String name;
 
+  /// Default const constructor.  Takes the parameter name as an argument.
   const QueryParam([this.name]);
 }
 
+/// Annotation to define a body parameter.
+/// Usage:
+/// @Post('/users')
+/// Future<ReflutterResponse<User>> postUser(@Body() User user);
 class Body {
+  /// Default const constructor
   const Body();
 }
 
-class Get extends Req {
-  const Get([String url = "/"]) : super("GET", url);
+/// Annotation to define a method as a GET request.
+class Get extends _Req {
+  /// Default const constructor.
+  /// Takes the URL path as a parameter.  Defaults to ['/']
+  const Get([String url = '/']) : super('GET', url);
 }
 
-class Post extends Req {
-  const Post([String url = "/"]) : super("POST", url);
+/// Annotation to define a method as a POST request.
+class Post extends _Req {
+  /// Default const constructor.
+  /// Takes the URL path as a parameter.  Defaults to ['/']
+  const Post([String url = '/']) : super('POST', url);
 }
 
-class Put extends Req {
-  const Put([String url = "/"]) : super("PUT", url);
+/// Annotation to define a method as a PUT request.
+class Put extends _Req {
+  /// Default const constructor.
+  /// Takes the URL path as a parameter.  Defaults to ['/']
+  const Put([String url = '/']) : super('PUT', url);
 }
 
-class Delete extends Req {
-  const Delete([String url = "/"]) : super("DELETE", url);
+/// Annotation to define a method as a Delete request.
+class Delete extends _Req {
+  /// Default const constructor.
+  /// Takes the URL path as a parameter.  Defaults to ['/']
+  const Delete([String url = '/']) : super('DELETE', url);
 }
 
-class Patch extends Req {
-  const Patch([String url = "/"]) : super("PATCH", url);
+/// Annotation to define a method as a PATCH request.
+class Patch extends _Req {
+  /// Default const constructor.
+  /// Takes the URL path as a parameter.  Defaults to ['/']
+  const Patch([String url = '/']) : super('PATCH', url);
 }
 
+/// Defines the default wrapper for responses from the Reflutter generated API.
+/// This should be used for all API calls and should wrap whatver object type [T]
+/// that you expect from the call.
 class ReflutterResponse<T> {
-  final T body;
-  final http.Response rawResponse;
+  final T _body;
+  final http.Response _rawResponse;
 
-  ReflutterResponse(this.body, this.rawResponse);
-  ReflutterResponse.error(this.rawResponse) : body = null;
+  /// Generate a response for the given body and raw HTTP response.
+  ReflutterResponse(this._body, this._rawResponse);
 
+  /// Generates a response indicating an error condition 
+  /// with the given response.
+  ReflutterResponse.error(this._rawResponse) : _body = null;
+
+  /// Defines whether the response indicates success.
   bool isSuccessful() =>
-      rawResponse.statusCode >= 200 && rawResponse.statusCode < 300;
+      _rawResponse.statusCode >= 200 && _rawResponse.statusCode < 300;
 
-  String toString() => "RefitResponse($body)";
+  @override
+  String toString() => 'RefitResponse($_body)';
 }
 
+/// This class is not really intended for external use.  It is public
+/// only because it will get used by generated code.
 class ReflutterRequest<T> {
-  T body;
-  String method;
-  String url;
-  Map<String, String> headers;
+  /// The wrapped body object.
+  final T body;
+  /// The method used for the API call such as Get, Post, etc.
+  final String method;
+  /// The url of the API call.
+  final String url;
+  /// Any headers being sent during the call.
+  final Map<String, String> headers;
 
+  /// Default constructor use to specify all parameters.
   ReflutterRequest({this.method, this.headers, this.body, this.url});
 
+  /// Initiate the call to the API endpoint using the specified
+  /// [http.Client].  Returns an [http.Response] asynchronously.
   Future<http.Response> send(http.Client client) async {
     switch (method) {
-      case "POST":
+      case 'POST':
         return client.post(url, headers: headers, body: body);
-      case "PUT":
+      case 'PUT':
         return client.put(url, headers: headers, body: body);
-      case "PATCH":
+      case 'PATCH':
         return client.patch(url, headers: headers, body: body);
-      case "DELETE":
+      case 'DELETE':
         return client.delete(url, headers: headers);
       default:
         return client.get(url, headers: headers);
@@ -93,34 +143,67 @@ class ReflutterRequest<T> {
   }
 }
 
+/// The base class for all API definition objects.  This is used by 
+/// generated code and is not neccessarily meant for public use.  When
+/// implementors decorate a class with the [ReflutterHttp] attribute, a 
+/// partial instance of that class is generated which subclasses this 
+/// class.  Base class methods from this will be used to generate the 
+/// backing methods.
 abstract class ReflutterApiDefinition {
+  /// The base URL for the REST api.
   final String baseUrl;
+  /// Headers to be sent along with each request.
   final Map headers;
+  /// The HTTP client which will be used for connections.
   final http.Client client;
+  /// The JSON serializer to use for request and response serialization.
   final SerializerRepo serializers;
 
+  /// The main constructor that gets called with some default specified for brevity.
   ReflutterApiDefinition(
       this.client, this.baseUrl, Map headers, SerializerRepo serializers)
       : headers = headers ?? {'content-type': 'application/json'},
         serializers = serializers ?? new JsonRepo();
 
+  /// The [List] of [RequestInterceptor] objects to use when 
+  /// processing requests.
   final List<RequestInterceptor> requestInterceptors = [];
+
+  /// The [List] of [ResponseInterceptor] objects to use when 
+  /// processing requests.
   final List<ResponseInterceptor> responseInterceptors = [];
 
+  /// Allows for requests to be intercepted prior to submission to the REST
+  /// endpoint. This can be used to supplement a request with data, for instance
+  /// injecting bearer tokens or other authentication.
+  /// 
+  /// Calls all [RequestInterceptor] objects that have been added to 
+  /// [this.requestInterceptor] at the time of the request.  Each successive
+  /// call gets the object as returned from the previous [RequestInterceptor]
+  /// and is similar to a pipeline.
   @protected
   FutureOr<ReflutterRequest> interceptRequest(ReflutterRequest request) async {
+    var localreq = request;
     for (var i in requestInterceptors) {
-      request = await i(request);
+      localreq = await i(localreq);
     }
-    return request;
+    return localreq;
   }
 
+  /// Allows for responses to be intercepted prior to processing of the data.
+  /// This can be used to add custom error handling or logging or any number
+  /// of post-response actions as needed by the user.
+  /// 
+  /// Calls all [ResponseInterceptor] objects that have been added to 
+  /// [this.responseInterceptor] at the time of the response.  Each successive
+  /// call gets the object as returned from the previous [ResponseInterceptor]
+  /// and is similar to a pipeline.
   @protected
-  FutureOr<ReflutterResponse> interceptResponse(
-      ReflutterResponse response) async {
+  FutureOr<ReflutterResponse> interceptResponse(ReflutterResponse response) async {
+    var localresponse = response;
     for (var i in responseInterceptors) {
-      response = i(response);
+      localresponse = i(localresponse);
     }
-    return response;
+    return localresponse;
   }
 }
