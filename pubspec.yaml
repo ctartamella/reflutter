@@ -1,7 +1,10 @@
 name: reflutter
-description: A library to generate HTTP API clients.
+description: >
+  A library to generate HTTP clients from metadata specified by users.
+  The thought is that this can be used by Flutter based mobile apps to
+  connect to their backend resources.
 homepage: https://www.github.com/ctartamella/reflutter
-version: 0.2.1
+version: 0.2.2
 author: Chris Tartamella <chris@tartamella.me>
 
 environment:
