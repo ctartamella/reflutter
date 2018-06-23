@@ -96,22 +96,22 @@ class Patch extends _Req {
 /// This should be used for all API calls and should wrap whatver object type [T]
 /// that you expect from the call.
 class ReflutterResponse<T> {
-  final T _body;
-  final http.Response _rawResponse;
+  final T Body;
+  final http.Response RawResponse;
 
   /// Generate a response for the given body and raw HTTP response.
-  ReflutterResponse(this._body, this._rawResponse);
+  ReflutterResponse(this.Body, this.RawResponse);
 
   /// Generates a response indicating an error condition
   /// with the given response.
-  ReflutterResponse.error(this._rawResponse) : _body = null;
+  ReflutterResponse.error(this.RawResponse) : Body = null;
 
   /// Defines whether the response indicates success.
   bool isSuccessful() =>
-      _rawResponse.statusCode >= 200 && _rawResponse.statusCode < 300;
+      RawResponse.statusCode >= 200 && RawResponse.statusCode < 300;
 
   @override
-  String toString() => 'RefitResponse($_body)';
+  String toString() => 'RefitResponse($Body)';
 }
 
 /// This class is not really intended for external use.  It is public
