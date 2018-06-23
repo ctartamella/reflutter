@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:http/http.dart' as http;
-import 'package:jaguar_serializer/jaguar_serializer.dart';
 import 'package:meta/meta.dart';
 
 /// Typedef to define a [RequestInterceptor] method.
@@ -166,14 +165,9 @@ abstract class ReflutterApiDefinition {
   /// The HTTP client which will be used for connections.
   final http.Client client;
 
-  /// The JSON serializer to use for request and response serialization.
-  final SerializerRepo serializers;
-
   /// The main constructor that gets called with some default specified for brevity.
-  ReflutterApiDefinition(
-      this.client, this.baseUrl, Map headers, SerializerRepo serializers)
-      : headers = headers ?? {'content-type': 'application/json'},
-        serializers = serializers ?? new JsonRepo();
+  ReflutterApiDefinition(this.client, this.baseUrl, Map headers)
+      : headers = headers ?? {'content-type': 'application/json'};
 
   /// The [List] of [RequestInterceptor] objects to use when
   /// processing requests.

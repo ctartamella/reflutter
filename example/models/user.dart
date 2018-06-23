@@ -1,16 +1,20 @@
 library flutter_refit.user;
 
-import 'package:jaguar_serializer/jaguar_serializer.dart';
+import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
 
 part 'user.g.dart';
 
-class User {
-  String name;
-  String email;
+abstract class User implements Built<User, UserBuilder> {
+  String get name;
+  String get email;
+
+  User._();
+  factory User([updates(UserBuilder b)]) = _$User;
 }
 
-@GenSerializer()
-class UserSerializer extends Serializer<User> with _$UserSerializer {
-  @override
-  User createModel() => new User();
-}
+@SerializersFor(const [
+  User
+])
+
+final Serializers serializers = _$serializers;

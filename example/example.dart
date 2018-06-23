@@ -1,8 +1,9 @@
 library reflutter.example;
 
 import 'dart:async';
+import 'dart:convert';
+import 'package:built_value/serializer.dart';
 import 'package:http/http.dart';
-import 'package:jaguar_serializer/jaguar_serializer.dart';
 import 'package:reflutter/reflutter.dart';
 import 'models/user.dart';
 

@@ -4,8 +4,6 @@ targets:
     builders:
       reflutter:
         generate_for: ["example/example.dart"]
-      jaguar_serializer_cli:
-        generate_for: ["example/models/user.dart"]
 
 builders:
   reflutter:

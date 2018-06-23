@@ -134,10 +134,10 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
     ..requiredParameters.addAll([
       new builder.Parameter((b) => b
         ..name = kSerializers
-        ..type = kSerializerType)
+        ..type = kSerializersType)
     ])
     ..initializers.add(
-        const builder.Code('super(client, baseUrl, headers, serializers)')));
+        const builder.Code('super(client, baseUrl, headers)')));
 
   builder.Block _generateMethodBlock(
           MethodElement m, ConstantReader methodAnnot) =>
@@ -202,10 +202,11 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
 
     for (var p in method.parameters) {
       final pAnnot = _getBodyAnnotation(p);
-      if (pAnnot != null) {
-        params[kBody] = kSerializersRef
+      final serializeCall = kSerializersRef
             .property(kSerializeMethod)
             .call([builder.refer(p.name)]);
+      if (pAnnot != null) {
+        params[kBody] = kJsonRef.property("encode").call([serializeCall]) ;
       }
     }
 
@@ -229,9 +230,9 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
 
     final block = new builder.Block.of([
       const builder.Code('if (responseSuccessful(rawResponse)) {'),
-      const builder.Code('  response = new ReflutterResponse('),
-      new builder.Code(
-          '      serializers.deserialize(rawResponse.body, type: ${responseType?.name}), rawResponse);'),
+      new builder.Code('  response = new ReflutterResponse<${responseType?.displayName}>('),
+      const builder.Code(
+          '      serializers.deserialize(json.decode(rawResponse.body)), rawResponse);'),
       const builder.Code('} else {'),
       const builder.Code(
           '  response = new ReflutterResponse.error(rawResponse);'),
