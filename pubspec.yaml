@@ -4,7 +4,7 @@ description: >
   The thought is that this can be used by Flutter based mobile apps to
   connect to their backend resources.
 homepage: https://www.github.com/ctartamella/reflutter
-version: 0.2.3
+version: 0.2.4
 author: Chris Tartamella <chris@tartamella.me>
 
 environment:
