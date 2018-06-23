@@ -2,6 +2,11 @@ language: dart
 dart:
   - dev
 
+branches:
+  only: 
+    - master
+    - release
+
 jobs:
   include:
     - stage: codegen
@@ -17,3 +22,7 @@ stages:
   - codegen
   - analyze_and_format
   - deploy
+
+cache:
+  directories:
+    - $HOME/.pub-cache
