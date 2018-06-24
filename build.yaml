@@ -3,7 +3,7 @@ targets:
   $default:
     builders:
       reflutter:
-        generate_for: ["example/example.dart"]
+        generate_for: ["example/example.dart", "test/test_api.dart"]
 
 builders:
   reflutter:

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:built_value/serializer.dart';
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 
@@ -162,11 +163,13 @@ abstract class ReflutterApiDefinition {
   /// Headers to be sent along with each request.
   final Map headers;
 
+  final Serializers serializers;
+
   /// The HTTP client which will be used for connections.
   final http.Client client;
 
   /// The main constructor that gets called with some default specified for brevity.
-  ReflutterApiDefinition(this.client, this.baseUrl, Map headers)
+  ReflutterApiDefinition(this.client, this.baseUrl, Map headers, this.serializers)
       : headers = headers ?? {'content-type': 'application/json'};
 
   /// The [List] of [RequestInterceptor] objects to use when

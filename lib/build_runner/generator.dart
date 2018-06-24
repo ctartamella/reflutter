@@ -5,6 +5,7 @@ import 'package:build/build.dart';
 import 'package:code_builder/code_builder.dart';
 import 'package:dart_style/dart_style.dart';
 import 'package:logging/logging.dart';
+import 'package:meta/meta.dart';
 import 'package:source_gen/source_gen.dart';
 import 'package:code_builder/code_builder.dart' as builder;
 import '../reflutter.dart';
@@ -137,7 +138,7 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
         ..type = kSerializersType)
     ])
     ..initializers.add(
-        const builder.Code('super(client, baseUrl, headers)')));
+        const builder.Code('super(client, baseUrl, headers, serializers)')));
 
   builder.Block _generateMethodBlock(
           MethodElement m, ConstantReader methodAnnot) =>
@@ -226,11 +227,11 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
       .assignFinal(kRawResponse);
 
   builder.Expression _generateResponseProcess(MethodElement method) {
-    final responseType = _getResponseType(method.returnType);
+    final responseType = getResponseType(method.returnType);
 
     final block = new builder.Block.of([
       const builder.Code('if (responseSuccessful(rawResponse)) {'),
-      new builder.Code('  response = new ReflutterResponse<${responseType?.displayName}>('),
+      new builder.Code('  response = new ${responseType?.displayName}('),
       const builder.Code(
           '      serializers.deserialize(json.decode(rawResponse.body)), rawResponse);'),
       const builder.Code('} else {'),
@@ -242,7 +243,8 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
     return new builder.CodeExpression(block);
   }
 
-  DartType _getResponseType(DartType type) {
+  @visibleForTesting
+  DartType getResponseType(DartType type) {
     final generic = _genericOf(type);
     if (generic == null) {
       return type;
@@ -250,6 +252,6 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
     if (generic.isDynamic) {
       return null;
     }
-    return _getResponseType(generic);
+    return generic;
   }
 }
