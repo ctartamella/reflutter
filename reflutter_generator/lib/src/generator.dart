@@ -143,9 +143,7 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
         ..addExpression(_generateInterceptResponseReturn()));
 
   Expression _generateUrl(MethodElement method, ConstantReader annot) {
-    var value = '${annot
-        .read('url')
-        .stringValue}';
+    var value = '${annot.read('url').stringValue}';
     final query = <String, String>{};
     for (var p in method.parameters) {
       if (p.isPositional) {
@@ -182,9 +180,7 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
 
   Expression _generateRequest(MethodElement method, ConstantReader annot) {
     final params = {
-      kMethod: new Code("'${annot
-          .peek('method')
-          .stringValue}'"),
+      kMethod: new Code("'${annot.peek('method').stringValue}'"),
       kUrl: kUrlRef,
       kHeaders: kHeadersRef
     };
@@ -234,7 +230,7 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
     // }
 
     final block = new Block.of([
-      const Code('if (responseSuccessful(rawResponse)) {'),
+      const Code('if (ReflutterApiDefinition.responseSuccessful(rawResponse)) {'),
       new Code('  response = $responseCode;'),
       const Code('} else {'),
       const Code(

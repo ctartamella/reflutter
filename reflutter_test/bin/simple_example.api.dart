@@ -18,7 +18,7 @@ class Api extends ReflutterApiDefinition implements ApiDefinition {
     request = await interceptRequest(request);
     final rawResponse = await request.send(client);
     var response = null;
-    if (responseSuccessful(rawResponse)) {
+    if (ReflutterApiDefinition.responseSuccessful(rawResponse)) {
       response = new ReflutterResponse(
           new User.fromJson(json.decode(rawResponse.body)), rawResponse);
     } else {
@@ -37,7 +37,7 @@ class Api extends ReflutterApiDefinition implements ApiDefinition {
     request = await interceptRequest(request);
     final rawResponse = await request.send(client);
     var response = null;
-    if (responseSuccessful(rawResponse)) {
+    if (ReflutterApiDefinition.responseSuccessful(rawResponse)) {
       response = new ReflutterResponse(
           new User.fromJson(json.decode(rawResponse.body)), rawResponse);
     } else {
@@ -56,7 +56,7 @@ class Api extends ReflutterApiDefinition implements ApiDefinition {
     request = await interceptRequest(request);
     final rawResponse = await request.send(client);
     var response = null;
-    if (responseSuccessful(rawResponse)) {
+    if (ReflutterApiDefinition.responseSuccessful(rawResponse)) {
       response = new ReflutterResponse(
           new User.fromJson(json.decode(rawResponse.body)), rawResponse);
     } else {
@@ -75,7 +75,7 @@ class Api extends ReflutterApiDefinition implements ApiDefinition {
     request = await interceptRequest(request);
     final rawResponse = await request.send(client);
     var response = null;
-    if (responseSuccessful(rawResponse)) {
+    if (ReflutterApiDefinition.responseSuccessful(rawResponse)) {
       response = new ReflutterResponse.empty(rawResponse);
     } else {
       response =

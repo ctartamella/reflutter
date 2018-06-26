@@ -18,7 +18,7 @@ class TestApi extends ReflutterApiDefinition implements TestApiDefinition {
     request = await interceptRequest(request);
     final rawResponse = await request.send(client);
     var response = null;
-    if (responseSuccessful(rawResponse)) {
+    if (ReflutterApiDefinition.responseSuccessful(rawResponse)) {
       response = new ReflutterResponse(
           new HealthResponse.fromJson(json.decode(rawResponse.body)),
           rawResponse);
