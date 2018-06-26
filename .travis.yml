@@ -10,7 +10,7 @@ branches:
 jobs:
   include:
     - stage: prepublish
-      script: ./tool/prepublish.sh
+      script: bash ./tool/prepublish.sh
     - stage: publish
       script: bash ./tool/publish.sh
 
