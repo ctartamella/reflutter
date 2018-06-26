@@ -6,6 +6,7 @@
 set -e
 
 directories="reflutter reflutter_generator reflutter_test"
+build_runner_directories="reflutter_test"
 
 parent_directory=$PWD
 
@@ -15,7 +16,7 @@ for directory in $directories; do
   echo
   cd "$parent_directory/$directory"
 
-  dartfmt -w $(find bin lib test -name \*.dart 2>/dev/null)
+  dartfmt --set-exit-if-changed -w $(find bin lib test -name \*.dart 2>/dev/null)
 done
 
 for directory in $directories; do

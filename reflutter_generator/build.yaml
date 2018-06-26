@@ -1,4 +1,10 @@
 # Read about `build.yaml` at https://pub.dartlang.org/packages/build_config
+targets:
+  $default:
+    builders:
+      reflutter_generator:
+        enabled: true
+        
 builders:
   reflutter_generator:
     import: "package:reflutter_generator/reflutter_generator.dart"
