@@ -1,0 +1,8 @@
+# Read about `build.yaml` at https://pub.dartlang.org/packages/build_config
+builders:
+  reflutter_generator:
+    import: "package:reflutter_generator/reflutter_generator.dart"
+    builder_factories: ["reflutterBuilder"]
+    build_extensions: {".dart": [".api.dart"]}
+    auto_apply: dependents
+    build_to: source

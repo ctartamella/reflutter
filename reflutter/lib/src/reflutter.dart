@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:built_value/serializer.dart';
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 
@@ -98,13 +97,16 @@ class Patch extends _Req {
 class ReflutterResponse<T> {
   final T Body;
   final http.Response RawResponse;
+  final String Error;
 
   /// Generate a response for the given body and raw HTTP response.
-  ReflutterResponse(this.Body, this.RawResponse);
+  ReflutterResponse(this.Body, this.RawResponse) : Error = null;
+
+  ReflutterResponse.empty(this.RawResponse) : Body = null, Error = null;
 
   /// Generates a response indicating an error condition
   /// with the given response.
-  ReflutterResponse.error(this.RawResponse) : Body = null;
+  ReflutterResponse.error(this.RawResponse, this.Error) : Body = null;
 
   /// Defines whether the response indicates success.
   bool isSuccessful() =>
@@ -163,13 +165,11 @@ abstract class ReflutterApiDefinition {
   /// Headers to be sent along with each request.
   final Map headers;
 
-  final Serializers serializers;
-
   /// The HTTP client which will be used for connections.
   final http.Client client;
 
   /// The main constructor that gets called with some default specified for brevity.
-  ReflutterApiDefinition(this.client, this.baseUrl, Map headers, this.serializers)
+  ReflutterApiDefinition(this.client, this.baseUrl, Map headers)
       : headers = headers ?? {'content-type': 'application/json'};
 
   /// The [List] of [RequestInterceptor] objects to use when

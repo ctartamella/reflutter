@@ -1,0 +1,25 @@
+name: reflutter_test
+description: >
+  A library to generate HTTP clients from metadata specified by users.
+  The thought is that this can be used by Flutter based mobile apps to
+  connect to their backend resources.
+homepage: https://www.github.com/ctartamella/reflutter
+version: 0.2.4
+authors: 
+  - Chris Tartamella <chris@tartamella.me>
+
+environment:
+  sdk: '>=2.0.0-dev.58.0 <2.0.0'
+
+dependencies: 
+  http: ^0.11.3
+  json_annotation: ^0.2.9
+  reflutter:
+    path: ../reflutter
+    
+dev_dependencies:
+  json_serializable: ^0.5.8
+  build_runner: ^0.8.9
+  test: any
+  reflutter_generator:
+    path: ../reflutter_generator
