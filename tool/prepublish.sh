@@ -5,8 +5,7 @@
 
 set -e
 
-directories="built_value built_value_generator built_value_test \
-    end_to_end_test benchmark example chat_example"
+directories="reflutter reflutter_generator reflutter_test"
 
 parent_directory=$PWD
 
