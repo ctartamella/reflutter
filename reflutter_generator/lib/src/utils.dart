@@ -60,4 +60,5 @@ Reference get kMapType => refer('Map');
 
 Reference get kJsonRef => refer('json', 'dart:convert');
 
-Reference get kSerializersType => refer('Serializers', 'package:built_value/serializer.dart');
+Reference get kSerializersType =>
+    refer('Serializers', 'package:built_value/serializer.dart');

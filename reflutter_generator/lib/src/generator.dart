@@ -71,8 +71,7 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
       for (var param in m.parameters) {
         b.requiredParameters.add(new Parameter((b) => b
           ..name = param.name
-          ..type = new TypeReference(
-              (b) => b.symbol = '${param.type.name}')));
+          ..type = new TypeReference((b) => b.symbol = '${param.type.name}')));
       }
     });
   }
@@ -131,11 +130,9 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
         ..name = kHeaders
         ..type = kMapType)
     ])
-    ..initializers.add(
-        const Code('super(client, baseUrl, headers)')));
+    ..initializers.add(const Code('super(client, baseUrl, headers)')));
 
-  Block _generateMethodBlock(
-          MethodElement m, ConstantReader methodAnnot) =>
+  Block _generateMethodBlock(MethodElement m, ConstantReader methodAnnot) =>
       new Block((b) => b
         ..addExpression(_generateUrl(m, methodAnnot))
         ..addExpression(_generateRequest(m, methodAnnot))
@@ -174,17 +171,16 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
       });
       q += '}';
 
-      return literal('\$$kBaseUrl$value?\${$kParamsToQueryUri($q)}').assignFinal(kUrl);
+      return literal('\$$kBaseUrl$value?\${$kParamsToQueryUri($q)}')
+          .assignFinal(kUrl);
     }
 
     return literal('\$$kBaseUrl$value').assignFinal(kUrl);
   }
 
-  Expression _generateVarResponse() =>
-      literalNull.assignVar(kResponse);
+  Expression _generateVarResponse() => literalNull.assignVar(kResponse);
 
-  Expression _generateRequest(
-      MethodElement method, ConstantReader annot) {
+  Expression _generateRequest(MethodElement method, ConstantReader annot) {
     final params = {
       kMethod: new Code("'${annot
           .peek('method')
@@ -196,7 +192,7 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
     for (var p in method.parameters) {
       final pAnnot = _getBodyAnnotation(p);
       if (pAnnot != null) {
-        params[kBody] = kJsonRef.property("encode").call([refer(p.name)]) ;
+        params[kBody] = kJsonRef.property("encode").call([refer(p.name)]);
       }
     }
 
@@ -223,10 +219,12 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
     print(respTypeName);
     print(type);
     if (!respTypeName.startsWith("ReflutterResponse")) {
-      throw new Exception("Method return types should be of type ReflutterResponse. Instead, got $respTypeName<$type>");
+      throw new Exception(
+          "Method return types should be of type ReflutterResponse. Instead, got $respTypeName<$type>");
     }
 
-    var responseCode = 'new ReflutterResponse(new $type.fromJson(json.decode(rawResponse.body)), rawResponse)';
+    var responseCode =
+        'new ReflutterResponse(new $type.fromJson(json.decode(rawResponse.body)), rawResponse)';
     if (type == "dynamic") {
       responseCode = 'new ReflutterResponse.empty(rawResponse)';
     }

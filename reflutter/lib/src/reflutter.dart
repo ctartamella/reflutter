@@ -102,7 +102,9 @@ class ReflutterResponse<T> {
   /// Generate a response for the given body and raw HTTP response.
   ReflutterResponse(this.Body, this.RawResponse) : Error = null;
 
-  ReflutterResponse.empty(this.RawResponse) : Body = null, Error = null;
+  ReflutterResponse.empty(this.RawResponse)
+      : Body = null,
+        Error = null;
 
   /// Generates a response indicating an error condition
   /// with the given response.

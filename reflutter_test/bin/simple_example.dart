@@ -18,8 +18,6 @@ class User extends Object with _$UserSerializerMixin {
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 }
 
-
-
 /// definition
 @ReflutterHttp(name: 'Api')
 abstract class ApiDefinition {

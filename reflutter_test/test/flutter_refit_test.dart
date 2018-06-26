@@ -30,10 +30,10 @@ void main() async {
   });
 
   test("Test GET call", () async {
-    final api = new TestApi(mockclient, "/", { });
+    final api = new TestApi(mockclient, "/", {});
     var resp = await api.healthcheck();
 
     expect(resp.isSuccessful(), true);
     expect(resp.Body.value, "OK");
-  });  
+  });
 }

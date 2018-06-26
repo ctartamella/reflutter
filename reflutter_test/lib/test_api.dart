@@ -12,9 +12,9 @@ class HealthResponse extends Object with _$HealthResponseSerializerMixin {
   String value;
 
   HealthResponse(this.value);
-  factory HealthResponse.fromJson(Map<String, dynamic> json) => _$HealthResponseFromJson(json);
+  factory HealthResponse.fromJson(Map<String, dynamic> json) =>
+      _$HealthResponseFromJson(json);
 }
-
 
 @ReflutterHttp(name: 'TestApi')
 abstract class TestApiDefinition {
