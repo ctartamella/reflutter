@@ -21,9 +21,7 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
       Element element, ConstantReader annotation, BuildStep buildStep) async {
     final friendlyName = element.name;
     if (element is! ClassElement) {
-      throw new InvalidGenerationSourceError(
-          'Generator cannot target `$friendlyName`.',
-          todo: 'Remove the JaguarHttp annotation from `$friendlyName`.');
+      throw new InvalidGenerationSourceError('Generator cannot target `$friendlyName`.');
     }
 
     final ClassElement classElement = element;
@@ -230,12 +228,8 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
     // }
 
     final block = new Block.of([
-      const Code('if (ReflutterApiDefinition.responseSuccessful(rawResponse)) {'),
-      new Code('  response = $responseCode;'),
-      const Code('} else {'),
-      const Code(
-          '  response = new ReflutterResponse.error(rawResponse, rawResponse.reasonPhrase);'),
-      const Code('}')
+      new Code('if (ReflutterApiDefinition.responseSuccessful(rawResponse)) {response = $responseCode;}'),
+      const Code('else {response = new ReflutterResponse.error(rawResponse, rawResponse.reasonPhrase);}')
     ]);
 
     return new CodeExpression(block);

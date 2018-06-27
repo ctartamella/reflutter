@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
+import 'utils.dart' as util;
 
 /// Typedef to define a [RequestInterceptor] method.
 typedef RequestInterceptor = FutureOr<ReflutterRequest> Function(
