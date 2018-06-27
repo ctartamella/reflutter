@@ -21,7 +21,8 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
       Element element, ConstantReader annotation, BuildStep buildStep) async {
     final friendlyName = element.name;
     if (element is! ClassElement) {
-      throw new InvalidGenerationSourceError('Generator cannot target `$friendlyName`.');
+      throw new InvalidGenerationSourceError(
+          'Generator cannot target `$friendlyName`.');
     }
 
     final ClassElement classElement = element;
@@ -228,8 +229,10 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
     // }
 
     final block = new Block.of([
-      new Code('if (ReflutterApiDefinition.responseSuccessful(rawResponse)) {response = $responseCode;}'),
-      const Code('else {response = new ReflutterResponse.error(rawResponse, rawResponse.reasonPhrase);}')
+      new Code(
+          'if (ReflutterApiDefinition.responseSuccessful(rawResponse)) {response = $responseCode;}'),
+      const Code(
+          'else {response = new ReflutterResponse.error(rawResponse, rawResponse.reasonPhrase);}')
     ]);
 
     return new CodeExpression(block);

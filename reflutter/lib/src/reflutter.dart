@@ -218,6 +218,6 @@ abstract class ReflutterApiDefinition {
     return localresponse;
   }
 
-  static bool responseSuccessful(http.Response response) => 
-    util.responseSuccessful(response);
+  static bool responseSuccessful(http.Response response) =>
+      util.responseSuccessful(response);
 }
