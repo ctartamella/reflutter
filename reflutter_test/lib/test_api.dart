@@ -1,7 +1,5 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:http/http.dart';
 import 'package:reflutter/reflutter.dart';
 
 part 'test_api.api.dart';
