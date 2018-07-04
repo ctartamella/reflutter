@@ -12,15 +12,6 @@ parent_directory=$PWD
 
 for directory in $directories; do
   echo
-  echo "*** Formatting $directory..."
-  echo
-  cd "$parent_directory/$directory"
-
-  dartfmt --set-exit-if-changed -w $(find bin lib test -name \*.dart 2>/dev/null)
-done
-
-for directory in $directories; do
-  echo
   echo "*** Building $directory..."
   echo
   cd "$parent_directory/$directory"
