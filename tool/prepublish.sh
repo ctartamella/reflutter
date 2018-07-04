@@ -7,6 +7,7 @@ set -e
 
 directories="reflutter reflutter_generator reflutter_test"
 build_runner_directories="reflutter_test"
+test_directories="reflutter_test"
 
 parent_directory=$PWD
 
@@ -34,7 +35,7 @@ for directory in $directories; do
       $(find bin lib test -name \*.dart 2>/dev/null)
 done
 
-for directory in $directories; do
+for directory in $test_directories; do
   echo
   echo "*** Testing $directory..."
   echo
