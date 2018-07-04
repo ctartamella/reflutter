@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 mkdir -p .pub-cache
 
-if [ "$TRAVIS_BRANCH" == "release" ]; then
-  cat <<EOF > ~/.pub-cache/credentials.json
+cat <<EOF > ~/.pub-cache/credentials.json
 {
   "accessToken":"$accessToken",
   "refreshToken":"$refreshToken",
@@ -12,5 +11,4 @@ if [ "$TRAVIS_BRANCH" == "release" ]; then
 }
 EOF
 
-  pub publish -f
-fi
+pub publish -f
