@@ -16,8 +16,8 @@ jobs:
 
 stages:
   - Build
-  - Deploy
-    if: branch = release
+  - name: Deploy
+    if: branch = master
 
 cache:
   directories:
