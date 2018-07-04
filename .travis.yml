@@ -9,14 +9,15 @@ branches:
 
 jobs:
   include:
-    - stage: prepublish
-      script: bash ./tool/prepublish.sh
-    - stage: publish
+    - stage: Build
+      script: bash ./tool/build.sh
+    - stage: Deploy
       script: bash ./tool/publish.sh
 
 stages:
-  - prepublish
-  - publish
+  - Build
+  - Deploy
+    if: branch = release
 
 cache:
   directories:
