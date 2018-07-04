@@ -178,8 +178,10 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
   Expression _generateVarResponse() => literalNull.assignVar(kResponse);
 
   Expression _generateRequest(MethodElement method, ConstantReader annot) {
-    final params = {
-      kMethod: new Code("'${annot.peek('method').stringValue}'"),
+    final code = new Code("'${annot.peek('method').stringValue}'");
+    final annotExpr = new CodeExpression(code);
+    final Map<String, Expression> params = {
+      kMethod: annotExpr,
       kUrl: kUrlRef,
       kHeaders: kHeadersRef
     };
@@ -190,7 +192,6 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
         params[kBody] = kJsonRef.property("encode").call([refer(p.name)]);
       }
     }
-
     return kReflutterRequestRef.newInstance([], params).assignVar(kRequest);
   }
 
@@ -200,9 +201,9 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
   Expression _generateInterceptResponseReturn() =>
       kInterceptResRef.call([kResponseRef]).awaited.returned;
 
-  Reference _generateSendRequest() => kRequestRef
+  Expression _generateSendRequest() => kRequestRef
       .property(kSendMethod)
-      .call([kClientRef])
+      .call([new CodeExpression(new Code(kClient))])
       .awaited
       .assignFinal(kRawResponse);
 
