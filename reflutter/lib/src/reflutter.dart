@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:http/http.dart' as http;
-import 'package:jaguar_serializer/jaguar_serializer.dart';
 import 'package:meta/meta.dart';
+import 'utils.dart' as util;
 
 /// Typedef to define a [RequestInterceptor] method.
 typedef RequestInterceptor = FutureOr<ReflutterRequest> Function(
@@ -98,13 +98,18 @@ class Patch extends _Req {
 class ReflutterResponse<T> {
   final T Body;
   final http.Response RawResponse;
+  final String Error;
 
   /// Generate a response for the given body and raw HTTP response.
-  ReflutterResponse(this.Body, this.RawResponse);
+  ReflutterResponse(this.Body, this.RawResponse) : Error = null;
+
+  ReflutterResponse.empty(this.RawResponse)
+      : Body = null,
+        Error = null;
 
   /// Generates a response indicating an error condition
   /// with the given response.
-  ReflutterResponse.error(this.RawResponse) : Body = null;
+  ReflutterResponse.error(this.RawResponse, this.Error) : Body = null;
 
   /// Defines whether the response indicates success.
   bool isSuccessful() =>
@@ -166,14 +171,9 @@ abstract class ReflutterApiDefinition {
   /// The HTTP client which will be used for connections.
   final http.Client client;
 
-  /// The JSON serializer to use for request and response serialization.
-  final SerializerRepo serializers;
-
   /// The main constructor that gets called with some default specified for brevity.
-  ReflutterApiDefinition(
-      this.client, this.baseUrl, Map headers, SerializerRepo serializers)
-      : headers = headers ?? {'content-type': 'application/json'},
-        serializers = serializers ?? new JsonRepo();
+  ReflutterApiDefinition(this.client, this.baseUrl, Map headers)
+      : headers = headers ?? {'content-type': 'application/json'};
 
   /// The [List] of [RequestInterceptor] objects to use when
   /// processing requests.
@@ -217,4 +217,7 @@ abstract class ReflutterApiDefinition {
     }
     return localresponse;
   }
+
+  static bool responseSuccessful(http.Response response) =>
+      util.responseSuccessful(response);
 }

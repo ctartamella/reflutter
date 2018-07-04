@@ -9,19 +9,14 @@ branches:
 
 jobs:
   include:
-    - stage: codegen
-      script: pub run build_runner build --delete-conflicting-outputs
-    - stage: analyze_and_format
-      script: dartanalyzer --fatal-warnings .
-    - stage: analyze_and_format
-      script: dartfmt --set-exit-if-changed .
-    - stage: deploy
+    - stage: prepublish
+      script: bash ./tool/prepublish.sh
+    - stage: publish
       script: bash ./tool/publish.sh
 
 stages:
-  - codegen
-  - analyze_and_format
-  - deploy
+  - prepublish
+  - publish
 
 cache:
   directories:
