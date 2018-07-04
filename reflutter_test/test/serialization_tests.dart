@@ -15,8 +15,8 @@ void main() {
   });
 
   test("List serialization", () async {
-    var list = new List<HealthResponse>.filled(5, new HealthResponse("OK"));
-    var jBody = json.encode(list);
-    var obj = json.decode(jBody);
+    //var list = new List<HealthResponse>.filled(5, new HealthResponse("OK"));
+    //var jBody = json.encode(list);
+    //var obj = json.decode(jBody);
   });
 }
