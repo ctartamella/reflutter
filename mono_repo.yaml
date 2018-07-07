@@ -1,0 +1,7 @@
+# Created by mono_repo
+reflutter:
+  published: true
+reflutter_generator:
+  published: true
+reflutter_test:
+  published: false 

@@ -1,27 +1,37 @@
+# Created with https://github.com/dart-lang/mono_repo
 language: dart
-dart:
-  - dev
-
-branches:
-  only: 
-    - master
-    - release
 
 jobs:
   include:
-    - stage: codegen
-      script: pub run build_runner build --delete-conflicting-outputs
     - stage: analyze_and_format
-      script: dartanalyzer --fatal-warnings .
+      script: ./tool/travis.sh dartfmt dartanalyzer
+      env: PKG="reflutter"
+      dart: dev
     - stage: analyze_and_format
-      script: dartfmt --set-exit-if-changed .
-    - stage: deploy
-      script: bash ./tool/publish.sh
+      script: ./tool/travis.sh dartfmt dartanalyzer
+      env: PKG="reflutter_generator"
+      dart: dev
+    - stage: build
+      script: ./tool/travis.sh command
+      env: PKG="reflutter_test"
+      dart: dev
+    - stage: analyze_and_format
+      script: ./tool/travis.sh dartfmt dartanalyzer
+      env: PKG="reflutter_test"
+      dart: dev
+    - stage: unit_test
+      script: ./tool/travis.sh test
+      env: PKG="reflutter_test"
+      dart: dev
 
 stages:
-  - codegen
+  - build
   - analyze_and_format
-  - deploy
+  - unit_test
+
+# Only building master means that we don't run two builds for each pull request.
+branches:
+  only: [master]
 
 cache:
   directories:

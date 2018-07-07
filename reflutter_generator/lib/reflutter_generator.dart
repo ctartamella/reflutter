@@ -1,11 +1,8 @@
-library reflutter;
+library reflutter_generator;
 
 import 'package:build/build.dart';
 import 'package:source_gen/source_gen.dart';
-import 'build_runner/generator.dart';
-
-export 'src/reflutter.dart';
-export 'src/utils.dart';
+import 'src/generator.dart';
 
 /// The main build generator used by the build_runner package
 /// for code generation.  This is searched out automatically
