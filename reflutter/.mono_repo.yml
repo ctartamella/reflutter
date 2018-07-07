@@ -3,7 +3,6 @@ dart:
 
 stages:
   - analyze_and_format:
-    - command: pub run build_runner build --delete-conflicting-outputs --fail-on-severe
     - group:
       - dartfmt: sdk
       - dartanalyzer: --strong --fatal-infos --fatal-warnings .
