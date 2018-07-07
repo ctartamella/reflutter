@@ -9,14 +9,14 @@ branches:
 
 jobs:
   include:
-    - stage: Build
+    - stage: build
       script: bash ./tool/build.sh
-    - stage: Deploy
+    - stage: deploy
       script: bash ./tool/publish.sh
 
 stages:
-  - Build
-  - name: Deploy
+  - build
+  - name: deploy
     if: branch = master
 
 cache:
