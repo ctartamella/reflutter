@@ -148,9 +148,7 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
       if (p.isPositional) {
         final pAnnot = _getParamAnnotation(p);
         if (pAnnot != null) {
-          final key = ':${pAnnot
-              ?.peek('name')
-              ?.stringValue ?? p.name}';
+          final key = ':${pAnnot?.peek('name')?.stringValue ?? p.name}';
           value = value.replaceFirst(key, '\$${p.name}');
         }
       } else if (p.isNamed) {
