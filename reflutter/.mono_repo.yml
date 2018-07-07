@@ -5,14 +5,10 @@ stages:
   - analyze_and_format:
     - group:
       - dartfmt: sdk
+        name: format
       - dartanalyzer: --strong --fatal-infos --fatal-warnings .
+        name: analyze
   - publish:
     - group:
       - command: pub publish -f
-  #- unit_test:
-  #  - test: -x integration
-  #- e2e_test:
-  #  - test: -t integration --total-shards 4 --shard-index 0
-  #  - test: -t integration --total-shards 4 --shard-index 1
-  #  - test: -t integration --total-shards 4 --shard-index 2
-  #  - test: -t integration --total-shards 4 --shard-index 3
+        name: publish
