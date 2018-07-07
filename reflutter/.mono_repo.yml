@@ -8,7 +8,3 @@ stages:
         name: format
       - dartanalyzer: --strong --fatal-infos --fatal-warnings .
         name: analyze
-  - publish:
-    - group:
-      - command: pub publish -f
-        name: publish

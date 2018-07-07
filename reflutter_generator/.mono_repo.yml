@@ -5,7 +5,6 @@ stages:
   - analyze_and_format:
     - group:
       - dartfmt: sdk
+        name: format
       - dartanalyzer: --strong --fatal-infos --fatal-warnings .
-  - publish:
-    - group:
-      - command: pub publish -f
+        name: analyze
