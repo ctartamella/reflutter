@@ -7,34 +7,27 @@ jobs:
       script: ./tool/travis.sh dartfmt dartanalyzer
       env: PKG="reflutter"
       dart: dev
-    - stage: publish
-      script: ./tool/travis.sh command_0
-      env: PKG="reflutter"
-      dart: dev
-    - stage: analyze_and_format
-      script: ./tool/travis.sh command_1
-      env: PKG="reflutter_generator"
-      dart: dev
     - stage: analyze_and_format
       script: ./tool/travis.sh dartfmt dartanalyzer
       env: PKG="reflutter_generator"
       dart: dev
-    - stage: publish
-      script: ./tool/travis.sh command_0
-      env: PKG="reflutter_generator"
-      dart: dev
-    - stage: analyze_and_format
-      script: ./tool/travis.sh command_1
+    - stage: build
+      script: ./tool/travis.sh command
       env: PKG="reflutter_test"
       dart: dev
     - stage: analyze_and_format
       script: ./tool/travis.sh dartfmt dartanalyzer
+      env: PKG="reflutter_test"
+      dart: dev
+    - stage: unit_test
+      script: ./tool/travis.sh test
       env: PKG="reflutter_test"
       dart: dev
 
 stages:
+  - build
   - analyze_and_format
-  - publish
+  - unit_test
 
 # Only building master means that we don't run two builds for each pull request.
 branches:
