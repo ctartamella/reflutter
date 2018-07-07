@@ -21,13 +21,13 @@ while (( "$#" )); do
   case $TASK in
   command_0) echo
     echo -e '\033[1mTASK: command_0\033[22m'
-    echo -e 'pub run build_runner build --delete-conflicting-outputs --fail-on-severe'
-    pub run build_runner build --delete-conflicting-outputs --fail-on-severe || EXIT_CODE=$?
+    echo -e 'pub publish -f'
+    pub publish -f || EXIT_CODE=$?
     ;;
   command_1) echo
     echo -e '\033[1mTASK: command_1\033[22m'
-    echo -e 'pub publish -f'
-    pub publish -f || EXIT_CODE=$?
+    echo -e 'pub run build_runner build --delete-conflicting-outputs --fail-on-severe'
+    pub run build_runner build --delete-conflicting-outputs --fail-on-severe || EXIT_CODE=$?
     ;;
   dartanalyzer) echo
     echo -e '\033[1mTASK: dartanalyzer\033[22m'

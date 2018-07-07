@@ -4,19 +4,15 @@ language: dart
 jobs:
   include:
     - stage: analyze_and_format
-      script: ./tool/travis.sh command_0
-      env: PKG="reflutter"
-      dart: dev
-    - stage: analyze_and_format
       script: ./tool/travis.sh dartfmt dartanalyzer
       env: PKG="reflutter"
       dart: dev
     - stage: publish
-      script: ./tool/travis.sh command_1
+      script: ./tool/travis.sh command_0
       env: PKG="reflutter"
       dart: dev
     - stage: analyze_and_format
-      script: ./tool/travis.sh command_0
+      script: ./tool/travis.sh command_1
       env: PKG="reflutter_generator"
       dart: dev
     - stage: analyze_and_format
@@ -24,11 +20,11 @@ jobs:
       env: PKG="reflutter_generator"
       dart: dev
     - stage: publish
-      script: ./tool/travis.sh command_1
+      script: ./tool/travis.sh command_0
       env: PKG="reflutter_generator"
       dart: dev
     - stage: analyze_and_format
-      script: ./tool/travis.sh command_0
+      script: ./tool/travis.sh command_1
       env: PKG="reflutter_test"
       dart: dev
     - stage: analyze_and_format
