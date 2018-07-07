@@ -1,23 +1,48 @@
+# Created with https://github.com/dart-lang/mono_repo
 language: dart
-dart:
-  - dev
-
-branches:
-  only: 
-    - master
-    - release
 
 jobs:
   include:
-    - stage: build
-      script: bash ./tool/build.sh
-    - stage: deploy
-      script: bash ./tool/publish.sh
+    - stage: analyze_and_format
+      script: ./tool/travis.sh command_0
+      env: PKG="reflutter"
+      dart: dev
+    - stage: analyze_and_format
+      script: ./tool/travis.sh dartfmt dartanalyzer
+      env: PKG="reflutter"
+      dart: dev
+    - stage: publish
+      script: ./tool/travis.sh command_1
+      env: PKG="reflutter"
+      dart: dev
+    - stage: analyze_and_format
+      script: ./tool/travis.sh command_0
+      env: PKG="reflutter_generator"
+      dart: dev
+    - stage: analyze_and_format
+      script: ./tool/travis.sh dartfmt dartanalyzer
+      env: PKG="reflutter_generator"
+      dart: dev
+    - stage: publish
+      script: ./tool/travis.sh command_1
+      env: PKG="reflutter_generator"
+      dart: dev
+    - stage: analyze_and_format
+      script: ./tool/travis.sh command_0
+      env: PKG="reflutter_test"
+      dart: dev
+    - stage: analyze_and_format
+      script: ./tool/travis.sh dartfmt dartanalyzer
+      env: PKG="reflutter_test"
+      dart: dev
 
 stages:
-  - build
-  - name: deploy
-    if: branch = release
+  - analyze_and_format
+  - publish
+
+# Only building master means that we don't run two builds for each pull request.
+branches:
+  only: [master]
 
 cache:
   directories:

@@ -1,0 +1,19 @@
+dart:
+  - dev
+
+stages:
+  - analyze_and_format:
+    - command: pub run build_runner build --delete-conflicting-outputs --fail-on-severe
+    - group:
+      - dartfmt: sdk
+      - dartanalyzer: --strong --fatal-infos --fatal-warnings .
+  - publish:
+    - group:
+      - command: pub publish -f
+  #- unit_test:
+  #  - test: -x integration
+  #- e2e_test:
+  #  - test: -t integration --total-shards 4 --shard-index 0
+  #  - test: -t integration --total-shards 4 --shard-index 1
+  #  - test: -t integration --total-shards 4 --shard-index 2
+  #  - test: -t integration --total-shards 4 --shard-index 3
