@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
+
+directories="reflutter reflutter_generator reflutter_test"
+parent_directory=$PWD
+
 mkdir -p .pub-cache
 
-if [ "$TRAVIS_BRANCH" == "release" ]; then
-  cat <<EOF > ~/.pub-cache/credentials.json
+cat <<EOF > ~/.pub-cache/credentials.json
 {
   "accessToken":"$accessToken",
   "refreshToken":"$refreshToken",
@@ -12,5 +15,11 @@ if [ "$TRAVIS_BRANCH" == "release" ]; then
 }
 EOF
 
+for directory in $directories; do
+  echo
+  echo "*** Publishing $directory..."
+  echo
+  cd "$parent_directory/$directory"
+
   pub publish -f
-fi
+done
