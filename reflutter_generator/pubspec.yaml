@@ -4,11 +4,11 @@ description: >
   The thought is that this can be used by Flutter based mobile apps to
   connect to their backend resources.
 homepage: https://www.github.com/ctartamella/reflutter
-version: 0.3.0
+version: 0.3.0+1
 author: Chris Tartamella <chris@tartamella.me>
 
 environment:
-  sdk: '>=2.0.0-dev.66.0 <2.0.0'
+  sdk: '>=2.0.0-dev.63.0 <2.0.0'
 
 dependencies:
   meta: ^1.1.5
@@ -18,8 +18,7 @@ dependencies:
   dart_style: ^1.1.1
   logging: ^0.11.3+1
   source_gen: ^0.8.2
-  reflutter: ^0.3.0
-  path: ^1.6.1 # Temporary
+  reflutter: ^0.3.0+1
   
 dev_dependencies:
   build_runner: ^0.9.1
