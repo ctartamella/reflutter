@@ -22,3 +22,7 @@ dev_dependencies:
   test: any
   reflutter_generator:
     path: ../reflutter_generator
+
+#dependency_overrides:
+#  reflutter:
+#    path: ../reflutter
