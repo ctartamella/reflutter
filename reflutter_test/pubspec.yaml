@@ -9,21 +9,21 @@ authors:
   - Chris Tartamella <chris@tartamella.me>
 
 environment:
-  sdk: '>=2.0.0-dev.66.0 <2.0.0'
+  sdk: '>=2.0.0-dev.63.0 <3.0.0'
 
 dependencies: 
   http: ^0.11.3
-  json_annotation: ^0.2.9
-  reflutter: ^0.3.0+1
+  json_annotation: ^1.0.0
+  reflutter: ^0.4.0
     
 dev_dependencies:
-  json_serializable: ^0.5.8
-  build_runner: ^0.9.0
+  json_serializable: ^1.0.0
+  build_runner: ^1.0.0
   test: any
-  reflutter_generator: ^0.3.0+1
+  reflutter_generator: ^0.4.0
 
-#dependency_overrides:
-#  reflutter:
-#    path: ../reflutter
-#  reflutter_generator:
-#    path: ../reflutter_generator
+dependency_overrides:
+  reflutter:
+    path: ../reflutter
+  reflutter_generator:
+    path: ../reflutter_generator
