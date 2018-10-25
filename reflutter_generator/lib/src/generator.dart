@@ -210,8 +210,6 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
     final respTypeName = responseType?.displayName;
     final type = this._genericOf(responseType)?.displayName;
 
-    print(respTypeName);
-    print(type);
     if (!respTypeName.startsWith("ReflutterResponse")) {
       throw new Exception(
           "Method return types should be of type ReflutterResponse. Instead, got $respTypeName<$type>");
