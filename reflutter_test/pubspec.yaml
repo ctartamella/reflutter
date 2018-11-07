@@ -4,7 +4,7 @@ description: >
   The thought is that this can be used by Flutter based mobile apps to
   connect to their backend resources.
 homepage: https://www.github.com/ctartamella/reflutter
-version: 0.3.0
+version: 0.4.1
 authors: 
   - Chris Tartamella <chris@tartamella.me>
 
@@ -12,7 +12,7 @@ environment:
   sdk: '>=2.0.0-dev.63.0 <3.0.0'
 
 dependencies: 
-  http: ^0.11.3
+  http: ^0.12.0
   json_annotation: ^1.0.0
   reflutter: ^0.4.0
     
