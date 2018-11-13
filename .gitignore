@@ -20,3 +20,4 @@ packages
 pubspec.lock
 
 **/.DS_Store
+\.idea/
