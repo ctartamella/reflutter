@@ -15,7 +15,9 @@ final Logger _log = new Logger('ReflutterHttpGenerator');
 /// The main geneator class used by build_runner.
 class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
   final _methodsAnnotations = const [Get, Post, Delete, Put, Patch];
-
+  String _value = "";
+  String _queryString = "";
+    
   @override
   Future<String> generateForAnnotatedElement(
       Element element, ConstantReader annotation, BuildStep buildStep) async {
@@ -44,11 +46,13 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
       _log.info('${b.name}: Found ${b.methods.build().length} methods.');
     });
 
+    //return '${clazz.accept(new DartEmitter())}';
     return new DartFormatter().format('${clazz.accept(new DartEmitter())}');
   }
 
   Method _generateMethod(MethodElement m) {
     final methodAnnot = _getMethodAnnotation(m);
+    print("Method: ${m.name}");
     if (methodAnnot == null ||
         !m.isAbstract ||
         !m.returnType.isDartAsyncFuture) {
@@ -68,9 +72,17 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
         ..annotations.addAll([new CodeExpression(override)]);
 
       for (var param in m.parameters) {
-        b.requiredParameters.add(new Parameter((b) => b
+        var p = new Parameter((b) => b
           ..name = param.name
-          ..type = new TypeReference((b) => b.symbol = '${param.type.name}')));
+          ..type = new TypeReference((b) => b.symbol = '${param.type.name}')
+          ..named = param.isNamed
+          ..defaultTo = new Code(param.defaultValueCode)
+        );
+
+        if (param.isOptional)
+          b.optionalParameters.add(p);
+        else
+          b.requiredParameters.add(p);
       }
     });
   }
@@ -117,39 +129,47 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
     ..requiredParameters.addAll([
       new Parameter((b) => b
         ..name = kClient
-        ..type = kHttpClientType)
-    ])
-    ..requiredParameters.addAll([
+        ..type = kHttpClientType),
       new Parameter((b) => b
         ..name = kBaseUrl
         ..type = kStringType)
     ])
-    ..requiredParameters.addAll([
+    ..optionalParameters.addAll([
       new Parameter((b) => b
         ..name = kHeaders
+        ..named = true
         ..type = kMapType)
     ])
     ..initializers.add(const Code('super(client, baseUrl, headers)')));
 
-  Block _generateMethodBlock(MethodElement m, ConstantReader methodAnnot) =>
-      new Block((b) => b
-        ..addExpression(_generateUrl(m, methodAnnot))
-        ..addExpression(_generateRequest(m, methodAnnot))
-        ..addExpression(_generateInterceptRequest())
-        ..addExpression(_generateSendRequest())
-        ..addExpression(_generateVarResponse())
-        ..addExpression(_generateResponseProcess(m))
-        ..addExpression(_generateInterceptResponseReturn()));
+  Block _generateMethodBlock(MethodElement m, ConstantReader methodAnnot) => new Block((b) {
+        _parseParameters(m, methodAnnot);
 
-  Expression _generateUrl(MethodElement method, ConstantReader annot) {
-    var value = '${annot.read('url').stringValue}';
-    final query = <String, String>{};
+        if (_queryString != "") 
+          b.addExpression(_generateQuery(m, methodAnnot));
+
+        b..addExpression(_generateUrl(m, methodAnnot))
+          ..addExpression(_generateRequest(m, methodAnnot))
+          ..addExpression(_generateInterceptRequest())
+          ..addExpression(_generateSendRequest())
+          ..addExpression(_generateVarResponse())
+          ..addExpression(_generateResponseProcess(m))
+          ..addExpression(_generateInterceptResponseReturn());
+
+        _value = '';
+        _queryString = '';
+      });  
+
+  _parseParameters(MethodElement method, ConstantReader annot) {
+    _value = '${annot.read('url').stringValue}';
+
+    var query = {}; 
     for (var p in method.parameters) {
       if (p.isPositional) {
         final pAnnot = _getParamAnnotation(p);
         if (pAnnot != null) {
           final key = ':${pAnnot?.peek('name')?.stringValue ?? p.name}';
-          value = value.replaceFirst(key, '\$${p.name}');
+          _value = _value.replaceFirst(key, '\$${p.name}');
         }
       } else if (p.isNamed) {
         final pAnnot = _getQueryParamAnnotation(p);
@@ -160,17 +180,31 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
     }
 
     if (query.isNotEmpty) {
-      var q = '{';
+      _queryString = '{ ';
+
       query.forEach((key, val) {
-        q += "$key': '\$$val',";
+        _queryString += "'$key': '\$$val',";
       });
-      q += '}';
 
-      return literal('\$$kBaseUrl$value?\${$kParamsToQueryUri($q)}')
-          .assignFinal(kUrl);
+      _queryString += ' }';
     }
+  }
 
-    return literal('\$$kBaseUrl$value').assignFinal(kUrl);
+  Expression _generateQuery(MethodElement method, ConstantReader annot) {
+    if (null != _queryString && _queryString.isNotEmpty) {
+      var code = new Code(_queryString);
+      var expr = new CodeExpression(code);
+      return kParamsToQueryUriRef.call([expr]).assignFinal(kQueryStr);
+    }
+    
+    return null;
+  }
+
+  Expression _generateUrl(MethodElement method, ConstantReader annot) {
+    if (null != _queryString && _queryString.isNotEmpty)
+      return literal('\$$kBaseUrl$_value?\$$kQueryStr').assignFinal(kUrl);
+
+    return literal('\$$kBaseUrl$_value').assignFinal(kUrl);
   }
 
   Expression _generateVarResponse() => literalNull.assignVar(kResponse);
@@ -215,15 +249,16 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
           "Method return types should be of type ReflutterResponse. Instead, got $respTypeName<$type>");
     }
 
-    var responseCode =
+    String responseCode;
+    if (responseType.displayName.contains("List<"))
+      responseCode = 
+        'new ReflutterResponse(new $type.from(json.decode(rawResponse.body)), rawResponse)';
+    else
+      responseCode =
         'new ReflutterResponse(new $type.fromJson(json.decode(rawResponse.body)), rawResponse)';
     if (type == "dynamic") {
       responseCode = 'new ReflutterResponse.empty(rawResponse)';
     }
-
-    // if (type.startsWith("List")) {
-    //   responseCode = new List<String>.from();
-    // }
 
     final block = new Block.of([
       new Code(
