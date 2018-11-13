@@ -7,7 +7,7 @@ import 'package:test/test.dart';
 
 void main() {
   test("Simple serialization", () async {
-    var jBody = json.encode(new HealthResponse("OK"));
+    var jBody = json.encode(new HealthResponse(value: "OK"));
     expect(true, true);
 
     var sBody = new HealthResponse.fromJson(json.decode(jBody));

@@ -7,12 +7,8 @@ part of simple_example;
 // **************************************************************************
 
 User _$UserFromJson(Map<String, dynamic> json) {
-  return new User(json['name'] as String, json['email'] as String);
+  return User(json['name'] as String, json['email'] as String);
 }
 
-abstract class _$UserSerializerMixin {
-  String get name;
-  String get email;
-  Map<String, dynamic> toJson() =>
-      <String, dynamic>{'name': name, 'email': email};
-}
+Map<String, dynamic> _$UserToJson(User instance) =>
+    <String, dynamic>{'name': instance.name, 'email': instance.email};

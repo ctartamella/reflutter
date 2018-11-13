@@ -10,12 +10,14 @@ part 'simple_example.api.dart';
 part 'simple_example.g.dart';
 
 @JsonSerializable()
-class User extends Object with _$UserSerializerMixin {
+class User {
   String name;
   String email;
 
   User(this.name, this.email);
+
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+  Map<String, dynamic> toJson() => _$UserToJson(this);
 }
 
 /// definition
@@ -34,11 +36,11 @@ abstract class ApiDefinition {
   @Delete('/users/:id')
   Future<ReflutterResponse> deleteUser(@Param() String id);
 
-  //@Get('/users')
-  //Future<ReflutterResponse<List<User>>> search(
-  //    @QueryParam('n') String name, @QueryParam('e') String email);
+  @Get('/users')
+  Future<ReflutterResponse<List<User>>> search(
+      { @QueryParam('n') String name, @QueryParam('e') String email });
 }
 
 void main() {
-  //var api = new Api()
+  var api = new Api(new Client(), "http://localhost");
 }

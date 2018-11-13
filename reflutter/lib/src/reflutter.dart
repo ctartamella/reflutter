@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
-import 'utils.dart' as util;
 
 /// Typedef to define a [RequestInterceptor] method.
 typedef RequestInterceptor = FutureOr<ReflutterRequest> Function(
@@ -10,6 +9,16 @@ typedef RequestInterceptor = FutureOr<ReflutterRequest> Function(
 /// Typedef to define a [ResponseInterceptor] method.
 typedef ResponseInterceptor = FutureOr<ReflutterResponse> Function(
     ReflutterResponse response);
+
+/// Convert a [Map<String, String>] to a formatted query
+/// string for use in a URL.
+String paramsToQueryUri(Map<String, String> params) {
+  final pairs = <List<String>>[];
+  params.forEach((key, value) => pairs
+      .add([Uri.encodeQueryComponent(key), Uri.encodeQueryComponent(value)]));
+
+  return pairs.map((pair) => '${pair[0]}=${pair[1]}').join('&');
+}
 
 /// The main HTTP API defintion annotation.  This should be used
 /// to designate a class that should be processed by Reflutter's
@@ -219,5 +228,5 @@ abstract class ReflutterApiDefinition {
   }
 
   static bool responseSuccessful(http.Response response) =>
-      util.responseSuccessful(response);
+    response.statusCode >= 200 && response.statusCode < 300;  
 }

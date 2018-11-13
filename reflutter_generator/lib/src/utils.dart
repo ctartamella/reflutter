@@ -3,6 +3,7 @@
 import 'package:code_builder/code_builder.dart';
 
 const String kClient = 'client';
+const String kQueryStr = 'queryStr';
 const String kBaseUrl = 'baseUrl';
 const String kUrl = 'url';
 const String kHeaders = 'headers';
@@ -17,7 +18,7 @@ const String kInterceptRes = 'interceptResponse';
 const String kSendMethod = 'send';
 const String kParamsToQueryUri = 'paramsToQueryUri';
 
-Reference get kClientRef => refer(kClient);
+Reference get kParamsToQueryUriRef => refer(kParamsToQueryUri);
 Reference get kUrlRef => refer(kUrl);
 Reference get kHeadersRef => refer(kHeaders);
 Reference get kResponseRef => refer(kResponse);
