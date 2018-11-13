@@ -7,7 +7,7 @@ part of 'test_api.dart';
 // **************************************************************************
 
 class TestApi extends ReflutterApiDefinition implements TestApiDefinition {
-  TestApi(Client client, String baseUrl, Map headers)
+  TestApi(Client client, String baseUrl, {Map headers})
       : super(client, baseUrl, headers);
 
   @override

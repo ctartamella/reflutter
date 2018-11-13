@@ -8,12 +8,13 @@ part 'test_api.api.dart';
 part 'test_api.g.dart';
 
 @JsonSerializable()
-class HealthResponse extends Object with _$HealthResponseSerializerMixin {
-  String value;
+class HealthResponse {
+  final String value;
 
-  HealthResponse(this.value);
-  factory HealthResponse.fromJson(Map<String, dynamic> json) =>
-      _$HealthResponseFromJson(json);
+  HealthResponse({this.value});
+
+  factory HealthResponse.fromJson(Map<String, dynamic> json) => _$HealthResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$HealthResponseToJson(this);
 }
 
 @ReflutterHttp(name: 'TestApi')

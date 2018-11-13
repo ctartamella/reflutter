@@ -7,10 +7,8 @@ part of 'test_api.dart';
 // **************************************************************************
 
 HealthResponse _$HealthResponseFromJson(Map<String, dynamic> json) {
-  return new HealthResponse(json['value'] as String);
+  return HealthResponse(value: json['value'] as String);
 }
 
-abstract class _$HealthResponseSerializerMixin {
-  String get value;
-  Map<String, dynamic> toJson() => <String, dynamic>{'value': value};
-}
+Map<String, dynamic> _$HealthResponseToJson(HealthResponse instance) =>
+    <String, dynamic>{'value': instance.value};
