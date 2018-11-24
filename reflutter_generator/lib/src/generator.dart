@@ -52,7 +52,6 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
 
   Method _generateMethod(MethodElement m) {
     final methodAnnot = _getMethodAnnotation(m);
-    print("Method: ${m.name}");
     if (methodAnnot == null ||
         !m.isAbstract ||
         !m.returnType.isDartAsyncFuture) {

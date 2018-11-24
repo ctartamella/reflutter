@@ -1,0 +1,8 @@
+dart:
+  - dev
+
+stages:
+  - analyze:
+    - dartfmt
+    - dartanalyzer: --fatal-infos --fatal-warnings .    
+  
