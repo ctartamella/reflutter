@@ -41,6 +41,9 @@ abstract class ApiDefinition {
       { @QueryParam('n') String name, @QueryParam('e') String email });
 }
 
-void main() {
-  var api = new Api(new Client(), "http://localhost");
+void main() async {
+  var api = Api(new Client(), "http://localhost");
+  var user = await api.getUserById("1");
+
+  print("Username ${user.Body.name}");
 }

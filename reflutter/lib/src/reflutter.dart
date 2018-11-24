@@ -222,7 +222,7 @@ abstract class ReflutterApiDefinition {
       ReflutterResponse response) async {
     var localresponse = response;
     for (var i in responseInterceptors) {
-      localresponse = i(localresponse);
+      localresponse = await i(localresponse);
     }
     return localresponse;
   }

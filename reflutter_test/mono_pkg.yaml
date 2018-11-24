@@ -1,0 +1,12 @@
+dart:
+  - dev
+
+stages:
+  - analyze:
+    - dartfmt
+    - dartanalyzer: --fatal-infos --fatal-warnings .
+
+cache:
+  directories:
+  - .dart_tool/build
+  

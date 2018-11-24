@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "reflutter"
+		},
+		{
+			"path": "reflutter_generator"
+		},
+		{
+			"path": "reflutter_test"
+		},
+		{
+			"path": "."
+		}
+	]
+}

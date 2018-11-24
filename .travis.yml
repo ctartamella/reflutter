@@ -1,38 +1,53 @@
-# Created with https://github.com/dart-lang/mono_repo
+# Created with package:mono_repo v1.2.1
 language: dart
+
+# Custom configuration
+sudo: required
+addons:
+  chrome: stable
+branches:
+  only:
+    - master
+    - v1_x
 
 jobs:
   include:
-    - stage: analyze_and_format
-      script: ./tool/travis.sh dartfmt dartanalyzer
+    - stage: analyze
+      name: "SDK: dev - DIR: reflutter - TASKS: dartfmt -n --set-exit-if-changed ."
+      script: ./tool/travis.sh dartfmt
       env: PKG="reflutter"
       dart: dev
-    - stage: analyze_and_format
-      script: ./tool/travis.sh dartfmt dartanalyzer
+    - stage: analyze
+      name: "SDK: dev - DIR: reflutter - TASKS: dartanalyzer --fatal-infos --fatal-warnings ."
+      script: ./tool/travis.sh dartanalyzer
+      env: PKG="reflutter"
+      dart: dev
+    - stage: analyze
+      name: "SDK: dev - DIR: reflutter_generator - TASKS: dartfmt -n --set-exit-if-changed ."
+      script: ./tool/travis.sh dartfmt
       env: PKG="reflutter_generator"
       dart: dev
-    - stage: build
-      script: ./tool/travis.sh command
+    - stage: analyze
+      name: "SDK: dev - DIR: reflutter_generator - TASKS: dartanalyzer --fatal-infos --fatal-warnings ."
+      script: ./tool/travis.sh dartanalyzer
+      env: PKG="reflutter_generator"
+      dart: dev
+    - stage: analyze
+      name: "SDK: dev - DIR: reflutter_test - TASKS: dartfmt -n --set-exit-if-changed ."
+      script: ./tool/travis.sh dartfmt
       env: PKG="reflutter_test"
       dart: dev
-    - stage: analyze_and_format
-      script: ./tool/travis.sh dartfmt dartanalyzer
-      env: PKG="reflutter_test"
-      dart: dev
-    - stage: unit_test
-      script: ./tool/travis.sh test
+    - stage: analyze
+      name: "SDK: dev - DIR: reflutter_test - TASKS: dartanalyzer --fatal-infos --fatal-warnings ."
+      script: ./tool/travis.sh dartanalyzer
       env: PKG="reflutter_test"
       dart: dev
 
 stages:
-  - build
-  - analyze_and_format
-  - unit_test
-
-# Only building master means that we don't run two builds for each pull request.
-branches:
-  only: [master]
+  - analyze
 
 cache:
   directories:
-    - $HOME/.pub-cache
+    - "$HOME/.pub-cache"
+    - reflutter_generator/.dart_tool/build
+    - reflutter_test/.dart_tool/build
