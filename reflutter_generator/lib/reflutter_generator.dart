@@ -8,4 +8,4 @@ import 'src/generator.dart';
 /// for code generation.  This is searched out automatically
 /// and is not intended to be used by end users.
 Builder reflutterBuilder(BuilderOptions options) =>
-    new PartBuilder([new ReflutterHttpGenerator()], '.api.dart');
+    PartBuilder([ReflutterHttpGenerator()], '.api.dart');

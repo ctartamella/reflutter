@@ -38,12 +38,12 @@ abstract class ApiDefinition {
 
   @Get('/users')
   Future<ReflutterResponse<List<User>>> search(
-      { @QueryParam('n') String name, @QueryParam('e') String email });
+      { @QueryParam('n') String name = 'John Doe', @QueryParam('e') String email });
 }
 
 void main() async {
-  var api = Api(new Client(), "http://localhost");
-  var user = await api.getUserById("1");
+  var api = Api(Client(), 'http://localhost');
+  var user = await api.getUserById('1');
 
-  print("Username ${user.Body.name}");
+  print('Username ${user.body.name}');
 }

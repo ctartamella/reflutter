@@ -3,12 +3,12 @@ import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 
 /// Typedef to define a [RequestInterceptor] method.
-typedef RequestInterceptor = FutureOr<ReflutterRequest> Function(
-    ReflutterRequest request);
+typedef RequestInterceptor<T> = FutureOr<ReflutterRequest<T>> Function(
+    ReflutterRequest<T> request);
 
 /// Typedef to define a [ResponseInterceptor] method.
-typedef ResponseInterceptor = FutureOr<ReflutterResponse> Function(
-    ReflutterResponse response);
+typedef ResponseInterceptor<T> = FutureOr<ReflutterResponse<T>> Function(
+    ReflutterResponse<T> response);
 
 /// Convert a [Map<String, String>] to a formatted query
 /// string for use in a URL.
@@ -105,34 +105,34 @@ class Patch extends _Req {
 /// This should be used for all API calls and should wrap whatver object type [T]
 /// that you expect from the call.
 class ReflutterResponse<T> {
-  final T Body;
-  final http.Response RawResponse;
-  final String Error;
+  final T body;
+  final http.Response rawResponse;
+  final String errorMessage;
 
   /// Generate a response for the given body and raw HTTP response.
-  ReflutterResponse(this.Body, this.RawResponse) : Error = null;
+  ReflutterResponse(this.body, this.rawResponse) : errorMessage = null;
 
-  ReflutterResponse.empty(this.RawResponse)
-      : Body = null,
-        Error = null;
+  ReflutterResponse.empty(this.rawResponse)
+      : body = null,
+        errorMessage = null;
 
   /// Generates a response indicating an error condition
   /// with the given response.
-  ReflutterResponse.error(this.RawResponse, this.Error) : Body = null;
+  ReflutterResponse.error(this.rawResponse, this.errorMessage) : body = null;
 
   /// Defines whether the response indicates success.
   bool isSuccessful() =>
-      RawResponse.statusCode >= 200 && RawResponse.statusCode < 300;
+      rawResponse.statusCode >= 200 && rawResponse.statusCode < 300;
 
   @override
-  String toString() => 'RefitResponse($Body)';
+  String toString() => 'RefitResponse($body)';
 }
 
 /// This class is not really intended for external use.  It is public
 /// only because it will get used by generated code.
 class ReflutterRequest<T> {
   /// The wrapped body object.
-  final T body;
+  final String body;
 
   /// The method used for the API call such as Get, Post, etc.
   final String method;
@@ -144,7 +144,8 @@ class ReflutterRequest<T> {
   final Map<String, String> headers;
 
   /// Default constructor use to specify all parameters.
-  ReflutterRequest({this.method, this.headers, this.body, this.url});
+  ReflutterRequest({this.method, this.headers, this.body, url}) 
+    : this.url = url.toString();
 
   /// Initiate the call to the API endpoint using the specified
   /// [http.Client].  Returns an [http.Response] asynchronously.
@@ -175,13 +176,13 @@ abstract class ReflutterApiDefinition {
   final String baseUrl;
 
   /// Headers to be sent along with each request.
-  final Map headers;
+  final Map<String, String> headers;
 
   /// The HTTP client which will be used for connections.
   final http.Client client;
 
   /// The main constructor that gets called with some default specified for brevity.
-  ReflutterApiDefinition(this.client, this.baseUrl, Map headers)
+  ReflutterApiDefinition(this.client, this.baseUrl, Map<String, String> headers)
       : headers = headers ?? {'content-type': 'application/json'};
 
   /// The [List] of [RequestInterceptor] objects to use when

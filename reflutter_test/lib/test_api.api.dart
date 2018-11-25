@@ -7,26 +7,26 @@ part of 'test_api.dart';
 // **************************************************************************
 
 class TestApi extends ReflutterApiDefinition implements TestApiDefinition {
-  TestApi(Client client, String baseUrl, {Map headers})
+  TestApi(Client client, String baseUrl, {Map<String, String> headers})
       : super(client, baseUrl, headers);
 
   @override
   Future<ReflutterResponse<HealthResponse>> healthcheck() async {
     final url = '$baseUrl/';
-    var request =
-        new ReflutterRequest(method: 'GET', url: url, headers: headers);
+    var request = ReflutterRequest(method: 'GET', url: url, headers: headers);
     request = await interceptRequest(request);
     final rawResponse = await request.send(client);
-    var response = null;
+    ReflutterResponse response = null;
     if (ReflutterApiDefinition.responseSuccessful(rawResponse)) {
-      response = new ReflutterResponse(
-          new HealthResponse.fromJson(json.decode(rawResponse.body)),
+      response = ReflutterResponse(
+          HealthResponse.fromJson(
+              json.decode(rawResponse.body) as Map<String, String>),
           rawResponse);
     } else {
-      response =
-          new ReflutterResponse.error(rawResponse, rawResponse.reasonPhrase);
+      response = ReflutterResponse.error(rawResponse, rawResponse.reasonPhrase);
     }
     ;
-    return await interceptResponse(response);
+    return (await interceptResponse(response)
+        as Future<ReflutterResponse<HealthResponse>>);
   }
 }
