@@ -145,7 +145,7 @@ class ReflutterRequest<T> {
 
   /// Default constructor use to specify all parameters.
   ReflutterRequest({this.method, this.headers, this.body, url}) 
-    : this.url = url.toString();
+    : url = url.toString();
 
   /// Initiate the call to the API endpoint using the specified
   /// [http.Client].  Returns an [http.Response] asynchronously.
