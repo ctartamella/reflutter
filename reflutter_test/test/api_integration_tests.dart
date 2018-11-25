@@ -8,18 +8,18 @@ import 'package:http/testing.dart';
 import 'package:reflutter_test/test_api.dart';
 
 void main() async {
-  final mockclient = new MockClient((req) {
-    final body = new HealthResponse(value: "OK");
+  final mockclient = MockClient((req) {
+    final body = HealthResponse(value: 'OK');
     final jsonBody = json.encode(body);
-    final resp = new Response(jsonBody, 200);
-    return new Future<Response>.sync(() => resp);
+    final resp = Response(jsonBody, 200);
+    return Future<Response>.sync(() => resp);
   });
 
-  test("Test GET call", () async {
-    final api = new TestApi(mockclient, "/");
+  test('Test GET call', () async {
+    final api = TestApi(mockclient, '/');
     var resp = await api.healthcheck();
 
     expect(resp.isSuccessful(), true);
-    expect(resp.Body.value, "OK");
+    expect(resp.body.value, 'OK');
   });
 }
