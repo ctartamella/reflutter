@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.5.0
+
+- Updated typing and some other code quality issues.
+- Increased support for query parameters
+- Support for optional parameters.
+- Updated packages and serialization support.
+
 ## 0.3.0
 
 - Reorganized into three separate packages.  ```reflutter``` will serve as the main
