@@ -13,7 +13,8 @@ class HealthResponse {
 
   HealthResponse({this.value});
 
-  factory HealthResponse.fromJson(Map<String, dynamic> json) => _$HealthResponseFromJson(json);
+  factory HealthResponse.fromJson(Map<String, dynamic> json) =>
+      _$HealthResponseFromJson(json);
   Map<String, dynamic> toJson() => _$HealthResponseToJson(this);
 }
 

@@ -38,7 +38,8 @@ abstract class ApiDefinition {
 
   @Get('/users')
   Future<ReflutterResponse<List<User>>> search(
-      { @QueryParam('n') String name = 'John Doe', @QueryParam('e') String email });
+      {@QueryParam('n') String name = 'John Doe',
+      @QueryParam('e') String email});
 }
 
 void main() async {

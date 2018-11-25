@@ -144,8 +144,8 @@ class ReflutterRequest<T> {
   final Map<String, String> headers;
 
   /// Default constructor use to specify all parameters.
-  ReflutterRequest({this.method, this.headers, this.body, url}) 
-    : url = url.toString();
+  ReflutterRequest({this.method, this.headers, this.body, url})
+      : url = url.toString();
 
   /// Initiate the call to the API endpoint using the specified
   /// [http.Client].  Returns an [http.Response] asynchronously.
@@ -229,5 +229,5 @@ abstract class ReflutterApiDefinition {
   }
 
   static bool responseSuccessful(http.Response response) =>
-    response.statusCode >= 200 && response.statusCode < 300;  
+      response.statusCode >= 200 && response.statusCode < 300;
 }
