@@ -3,11 +3,11 @@ import 'package:reflutter_test/test_api.dart';
 
 void main() {
   test('Simple serialization', () async {
-    var resp = HealthResponse(value: 'OK');
-    var jBody = resp.toJson();
+    final resp = HealthResponse(value: 'OK');
+    final jBody = resp.toJson();
     expect(true, true);
 
-    var sBody = HealthResponse.fromJson(jBody);
+    final sBody = HealthResponse.fromJson(jBody);
     expect(sBody.value, 'OK');
   });
 
