@@ -148,13 +148,14 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
     if (queryString != '')
       list.add(_generateQuery(m, methodAnnot, queryString).statement);
 
-    list..add(_generateUrl(m, methodAnnot, queryString, url).statement)
-        ..add(_generateRequest(m, methodAnnot).statement)
-        ..add(_generateInterceptRequest(m, methodAnnot).statement)
-        ..add(_generateSendRequest().statement)
-        ..add(_generateErrorCheck())
-        ..add(_generateResponseProcess(m).code)
-        ..add(_generateReturnValue(m, methodAnnot).statement);
+    list
+      ..add(_generateUrl(m, methodAnnot, queryString, url).statement)
+      ..add(_generateRequest(m, methodAnnot).statement)
+      ..add(_generateInterceptRequest(m, methodAnnot).statement)
+      ..add(_generateSendRequest().statement)
+      ..add(_generateErrorCheck())
+      ..add(_generateResponseProcess(m).code)
+      ..add(_generateReturnValue(m, methodAnnot).statement);
 
     return Block.of(list);
   }
