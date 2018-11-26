@@ -69,7 +69,7 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
         ..annotations.addAll([CodeExpression(override)]);
 
       for (var param in m.parameters) {
-        var p = Parameter((b) {
+        final p = Parameter((b) {
           b
             ..name = param.name
             ..type = TypeReference((b) => b.symbol = '${param.type.name}')
@@ -141,20 +141,20 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
     ..initializers.add(const Code('super(client, baseUrl, headers)')));
 
   Code _generateMethodBlock(MethodElement m, ConstantReader methodAnnot) {
-    var list = <Code>[];
+    final list = <Code>[];
 
-    var url = _parseUrl(m, methodAnnot);
-    var queryString = _parseParameters(m, methodAnnot);
+    final url = _parseUrl(m, methodAnnot);
+    final queryString = _parseParameters(m, methodAnnot);
     if (queryString != '')
       list.add(_generateQuery(m, methodAnnot, queryString).statement);
 
-    list.add(_generateUrl(m, methodAnnot, queryString, url).statement);
-    list.add(_generateRequest(m, methodAnnot).statement);
-    list.add(_generateInterceptRequest(m, methodAnnot).statement);
-    list.add(_generateSendRequest().statement);
-    list.add(_generateErrorCheck());
-    list.add(_generateResponseProcess(m).code);
-    list.add(_generateReturnValue(m, methodAnnot).statement);
+    list..add(_generateUrl(m, methodAnnot, queryString, url).statement)
+        ..add(_generateRequest(m, methodAnnot).statement)
+        ..add(_generateInterceptRequest(m, methodAnnot).statement)
+        ..add(_generateSendRequest().statement)
+        ..add(_generateErrorCheck())
+        ..add(_generateResponseProcess(m).code)
+        ..add(_generateReturnValue(m, methodAnnot).statement);
 
     return Block.of(list);
   }
@@ -176,7 +176,7 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
   }
 
   String _parseParameters(MethodElement method, ConstantReader annot) {
-    var query = {};
+    final query = {};
     for (var p in method.parameters) {
       if (p.isNamed) {
         final pAnnot = _getQueryParamAnnotation(p);
@@ -203,8 +203,8 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
   Expression _generateQuery(
       MethodElement method, ConstantReader annot, String queryString) {
     if (null != queryString && queryString.isNotEmpty) {
-      var code = Code(queryString);
-      var expr = CodeExpression(code);
+      final code = Code(queryString);
+      final expr = CodeExpression(code);
       return kParamsToQueryUriRef.call([expr]).assignFinal(kQueryStr);
     }
 
@@ -271,7 +271,7 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
       response = 'ReflutterResponse.empty(rawResponse);';
     }
 
-    var resp = CodeExpression(Code(response));
+    final resp = CodeExpression(Code(response));
     return resp.assignFinal(kResponse);
   }
 
