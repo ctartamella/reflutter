@@ -169,7 +169,7 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
           final key = ':${pAnnot?.peek('name')?.stringValue ?? p.name}';
           url = url.replaceFirst(key, '\$${p.name}');
         }
-      } 
+      }
     }
 
     return url;
@@ -200,7 +200,8 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
     return queryString;
   }
 
-  Expression _generateQuery(MethodElement method, ConstantReader annot, String queryString) {
+  Expression _generateQuery(
+      MethodElement method, ConstantReader annot, String queryString) {
     if (null != queryString && queryString.isNotEmpty) {
       var code = Code(queryString);
       var expr = CodeExpression(code);
@@ -210,7 +211,8 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
     return null;
   }
 
-  Expression _generateUrl(MethodElement method, ConstantReader annot, String queryString, String url) {
+  Expression _generateUrl(MethodElement method, ConstantReader annot,
+      String queryString, String url) {
     if (null != queryString && queryString.isNotEmpty)
       return literal('\$$kBaseUrl$url?\$$kQueryStr').assignFinal(kUrl);
 
@@ -231,8 +233,9 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
     return kReflutterRequestRef.call([], params).assignVar(kRequest);
   }
 
-  Expression _generateInterceptRequest(MethodElement method, ConstantReader annot) =>
-    kRequestRef.assign(kInterceptReqRef.call([kRequestRef]).awaited);
+  Expression _generateInterceptRequest(
+          MethodElement method, ConstantReader annot) =>
+      kRequestRef.assign(kInterceptReqRef.call([kRequestRef]).awaited);
 
   Expression _generateSendRequest() => kRequestRef
       .property(kSendMethod)
@@ -241,7 +244,8 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
       .assignFinal(kRawResponse);
 
   Code _generateErrorCheck() {
-    return const Code('''if (!ReflutterApiDefinition.responseSuccessful(rawResponse)) {
+    return const Code(
+        '''if (!ReflutterApiDefinition.responseSuccessful(rawResponse)) {
       return ReflutterResponse(null, rawResponse);
     }''');
   }
@@ -272,7 +276,7 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
   }
 
   Expression _generateReturnValue(MethodElement method, ConstantReader annot) =>
-    kInterceptResRef.call([kResponseRef]).awaited.returned;
+      kInterceptResRef.call([kResponseRef]).awaited.returned;
 
   @meta.visibleForTesting
   DartType getResponseType(DartType type) {
