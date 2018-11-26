@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.5.1
+
+- Reintroduced request/response interceptors
+- Cleaned up output code.
+
 ## 0.5.0
 
 - Updated typing and some other code quality issues.
