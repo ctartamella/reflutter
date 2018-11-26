@@ -219,11 +219,11 @@ abstract class ReflutterApiDefinition {
   /// call gets the object as returned from the previous [ResponseInterceptor]
   /// and is similar to a pipeline.
   @protected
-  FutureOr<ReflutterResponse> interceptResponse(
-      ReflutterResponse response) async {
+  FutureOr<ReflutterResponse<T>> interceptResponse<T>(
+      ReflutterResponse<T> response) async {
     var localresponse = response;
     for (var i in responseInterceptors) {
-      localresponse = await i(localresponse);
+      localresponse = await i(localresponse) as ReflutterResponse<T>;
     }
     return localresponse;
   }

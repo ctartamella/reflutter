@@ -17,17 +17,13 @@ class Api extends ReflutterApiDefinition implements ApiDefinition {
         method: 'GET', url: url, headers: headers, body: json.encode(id));
     request = await interceptRequest(request);
     final rawResponse = await request.send(client);
-    ReflutterResponse response = null;
-    if (ReflutterApiDefinition.responseSuccessful(rawResponse)) {
-      response = ReflutterResponse(
-          User.fromJson(json.decode(rawResponse.body) as Map<String, String>),
-          rawResponse);
-    } else {
-      response = ReflutterResponse.error(rawResponse, rawResponse.reasonPhrase);
+    if (!ReflutterApiDefinition.responseSuccessful(rawResponse)) {
+      return ReflutterResponse(null, rawResponse);
     }
-    ;
-    return (await interceptResponse(response)
-        as Future<ReflutterResponse<User>>);
+    final response = ReflutterResponse(
+        User.fromJson(json.decode(rawResponse.body) as Map<String, dynamic>),
+        rawResponse);
+    return await interceptResponse(response);
   }
 
   @override
@@ -37,17 +33,13 @@ class Api extends ReflutterApiDefinition implements ApiDefinition {
         method: 'POST', url: url, headers: headers, body: json.encode(user));
     request = await interceptRequest(request);
     final rawResponse = await request.send(client);
-    ReflutterResponse response = null;
-    if (ReflutterApiDefinition.responseSuccessful(rawResponse)) {
-      response = ReflutterResponse(
-          User.fromJson(json.decode(rawResponse.body) as Map<String, String>),
-          rawResponse);
-    } else {
-      response = ReflutterResponse.error(rawResponse, rawResponse.reasonPhrase);
+    if (!ReflutterApiDefinition.responseSuccessful(rawResponse)) {
+      return ReflutterResponse(null, rawResponse);
     }
-    ;
-    return (await interceptResponse(response)
-        as Future<ReflutterResponse<User>>);
+    final response = ReflutterResponse(
+        User.fromJson(json.decode(rawResponse.body) as Map<String, dynamic>),
+        rawResponse);
+    return await interceptResponse(response);
   }
 
   @override
@@ -57,17 +49,13 @@ class Api extends ReflutterApiDefinition implements ApiDefinition {
         method: 'PUT', url: url, headers: headers, body: json.encode(user));
     request = await interceptRequest(request);
     final rawResponse = await request.send(client);
-    ReflutterResponse response = null;
-    if (ReflutterApiDefinition.responseSuccessful(rawResponse)) {
-      response = ReflutterResponse(
-          User.fromJson(json.decode(rawResponse.body) as Map<String, String>),
-          rawResponse);
-    } else {
-      response = ReflutterResponse.error(rawResponse, rawResponse.reasonPhrase);
+    if (!ReflutterApiDefinition.responseSuccessful(rawResponse)) {
+      return ReflutterResponse(null, rawResponse);
     }
-    ;
-    return (await interceptResponse(response)
-        as Future<ReflutterResponse<User>>);
+    final response = ReflutterResponse(
+        User.fromJson(json.decode(rawResponse.body) as Map<String, dynamic>),
+        rawResponse);
+    return await interceptResponse(response);
   }
 
   @override
@@ -77,15 +65,11 @@ class Api extends ReflutterApiDefinition implements ApiDefinition {
         method: 'DELETE', url: url, headers: headers, body: json.encode(id));
     request = await interceptRequest(request);
     final rawResponse = await request.send(client);
-    ReflutterResponse response = null;
-    if (ReflutterApiDefinition.responseSuccessful(rawResponse)) {
-      response = ReflutterResponse.empty(rawResponse);
-    } else {
-      response = ReflutterResponse.error(rawResponse, rawResponse.reasonPhrase);
+    if (!ReflutterApiDefinition.responseSuccessful(rawResponse)) {
+      return ReflutterResponse(null, rawResponse);
     }
-    ;
-    return (await interceptResponse(response)
-        as Future<ReflutterResponse<dynamic>>);
+    final response = ReflutterResponse.empty(rawResponse);
+    return await interceptResponse(response);
   }
 
   @override
@@ -100,16 +84,12 @@ class Api extends ReflutterApiDefinition implements ApiDefinition {
         method: 'GET', url: url, headers: headers, body: json.encode(email));
     request = await interceptRequest(request);
     final rawResponse = await request.send(client);
-    ReflutterResponse response = null;
-    if (ReflutterApiDefinition.responseSuccessful(rawResponse)) {
-      response = ReflutterResponse(
-          List<User>.from(json.decode(rawResponse.body) as Iterable),
-          rawResponse);
-    } else {
-      response = ReflutterResponse.error(rawResponse, rawResponse.reasonPhrase);
+    if (!ReflutterApiDefinition.responseSuccessful(rawResponse)) {
+      return ReflutterResponse(null, rawResponse);
     }
-    ;
-    return (await interceptResponse(response)
-        as Future<ReflutterResponse<List<User>>>);
+    final response = ReflutterResponse(
+        List<User>.from(json.decode(rawResponse.body) as Iterable),
+        rawResponse);
+    return await interceptResponse(response);
   }
 }

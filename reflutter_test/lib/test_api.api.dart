@@ -16,17 +16,13 @@ class TestApi extends ReflutterApiDefinition implements TestApiDefinition {
     var request = ReflutterRequest(method: 'GET', url: url, headers: headers);
     request = await interceptRequest(request);
     final rawResponse = await request.send(client);
-    ReflutterResponse response = null;
-    if (ReflutterApiDefinition.responseSuccessful(rawResponse)) {
-      response = ReflutterResponse(
-          HealthResponse.fromJson(
-              json.decode(rawResponse.body) as Map<String, String>),
-          rawResponse);
-    } else {
-      response = ReflutterResponse.error(rawResponse, rawResponse.reasonPhrase);
+    if (!ReflutterApiDefinition.responseSuccessful(rawResponse)) {
+      return ReflutterResponse(null, rawResponse);
     }
-    ;
-    return (await interceptResponse(response)
-        as Future<ReflutterResponse<HealthResponse>>);
+    final response = ReflutterResponse(
+        HealthResponse.fromJson(
+            json.decode(rawResponse.body) as Map<String, dynamic>),
+        rawResponse);
+    return await interceptResponse(response);
   }
 }

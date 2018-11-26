@@ -17,7 +17,7 @@ void main() async {
 
   test('Test GET call', () async {
     final api = TestApi(mockclient, '/');
-    var resp = await api.healthcheck();
+    final resp = await api.healthcheck();
 
     expect(resp.isSuccessful(), true);
     expect(resp.body.value, 'OK');

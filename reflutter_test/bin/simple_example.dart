@@ -43,8 +43,8 @@ abstract class ApiDefinition {
 }
 
 void main() async {
-  var api = Api(Client(), 'http://localhost');
-  var user = await api.getUserById('1');
+  final api = Api(Client(), 'http://localhost');
+  final user = await api.getUserById('1');
 
   print('Username ${user.body.name}');
 }

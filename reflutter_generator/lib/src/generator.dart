@@ -15,8 +15,6 @@ final Logger _log = Logger('ReflutterHttpGenerator');
 /// The main geneator class used by build_runner.
 class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
   final _methodsAnnotations = const [Get, Post, Delete, Put, Patch];
-  String _value = '';
-  String _queryString = '';
 
   @override
   Future<String> generateForAnnotatedElement(
@@ -46,7 +44,7 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
       _log.info('${b.name}: Found ${b.methods.build().length} methods.');
     });
 
-    //return '${clazz.accept(new DartEmitter())}';
+    //return '${clazz.accept(DartEmitter())}';
     return DartFormatter().format('${clazz.accept(DartEmitter())}');
   }
 
@@ -71,7 +69,7 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
         ..annotations.addAll([CodeExpression(override)]);
 
       for (var param in m.parameters) {
-        var p = Parameter((b) {
+        final p = Parameter((b) {
           b
             ..name = param.name
             ..type = TypeReference((b) => b.symbol = '${param.type.name}')
@@ -142,37 +140,46 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
     ])
     ..initializers.add(const Code('super(client, baseUrl, headers)')));
 
-  Block _generateMethodBlock(MethodElement m, ConstantReader methodAnnot) =>
-      Block((b) {
-        _parseParameters(m, methodAnnot);
+  Code _generateMethodBlock(MethodElement m, ConstantReader methodAnnot) {
+    final list = <Code>[];
 
-        if (_queryString != '') b.addExpression(_generateQuery(m, methodAnnot));
+    final url = _parseUrl(m, methodAnnot);
+    final queryString = _parseParameters(m, methodAnnot);
+    if (queryString != '')
+      list.add(_generateQuery(m, methodAnnot, queryString).statement);
 
-        b
-          ..addExpression(_generateUrl(m, methodAnnot))
-          ..addExpression(_generateRequest(m, methodAnnot))
-          ..addExpression(_generateInterceptRequest())
-          ..addExpression(_generateSendRequest())
-          ..addExpression(_generateVarResponse())
-          ..addExpression(_generateResponseProcess(m))
-          ..addExpression(_generateInterceptResponseReturn(m));
+    list
+      ..add(_generateUrl(m, methodAnnot, queryString, url).statement)
+      ..add(_generateRequest(m, methodAnnot).statement)
+      ..add(_generateInterceptRequest(m, methodAnnot).statement)
+      ..add(_generateSendRequest().statement)
+      ..add(_generateErrorCheck())
+      ..add(_generateResponseProcess(m).code)
+      ..add(_generateReturnValue(m, methodAnnot).statement);
 
-        _value = '';
-        _queryString = '';
-      });
+    return Block.of(list);
+  }
 
-  void _parseParameters(MethodElement method, ConstantReader annot) {
-    _value = '${annot.read('url').stringValue}';
+  String _parseUrl(MethodElement method, ConstantReader annot) {
+    var url = '${annot.read('url').stringValue}';
 
-    var query = {};
     for (var p in method.parameters) {
       if (p.isPositional) {
         final pAnnot = _getParamAnnotation(p);
         if (pAnnot != null) {
           final key = ':${pAnnot?.peek('name')?.stringValue ?? p.name}';
-          _value = _value.replaceFirst(key, '\$${p.name}');
+          url = url.replaceFirst(key, '\$${p.name}');
         }
-      } else if (p.isNamed) {
+      }
+    }
+
+    return url;
+  }
+
+  String _parseParameters(MethodElement method, ConstantReader annot) {
+    final query = {};
+    for (var p in method.parameters) {
+      if (p.isNamed) {
         final pAnnot = _getQueryParamAnnotation(p);
         if (pAnnot != null) {
           query[pAnnot?.peek('name')?.stringValue ?? p.name] = p.name;
@@ -180,36 +187,38 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
       }
     }
 
+    var queryString = '';
     if (query.isNotEmpty) {
-      _queryString = '{ ';
+      queryString = '{ ';
 
       query.forEach((key, val) {
-        _queryString += "'$key': '\$$val',";
+        queryString += "'$key': '\$$val',";
       });
 
-      _queryString += ' }';
+      queryString += ' }';
     }
+
+    return queryString;
   }
 
-  Expression _generateQuery(MethodElement method, ConstantReader annot) {
-    if (null != _queryString && _queryString.isNotEmpty) {
-      var code = Code(_queryString);
-      var expr = CodeExpression(code);
+  Expression _generateQuery(
+      MethodElement method, ConstantReader annot, String queryString) {
+    if (null != queryString && queryString.isNotEmpty) {
+      final code = Code(queryString);
+      final expr = CodeExpression(code);
       return kParamsToQueryUriRef.call([expr]).assignFinal(kQueryStr);
     }
 
     return null;
   }
 
-  Expression _generateUrl(MethodElement method, ConstantReader annot) {
-    if (null != _queryString && _queryString.isNotEmpty)
-      return literal('\$$kBaseUrl$_value?\$$kQueryStr').assignFinal(kUrl);
+  Expression _generateUrl(MethodElement method, ConstantReader annot,
+      String queryString, String url) {
+    if (null != queryString && queryString.isNotEmpty)
+      return literal('\$$kBaseUrl$url?\$$kQueryStr').assignFinal(kUrl);
 
-    return literal('\$$kBaseUrl$_value').assignFinal(kUrl);
+    return literal('\$$kBaseUrl$url').assignFinal(kUrl);
   }
-
-  Expression _generateVarResponse() =>
-      literalNull.assignVar(kResponse, kReflutterResponseRef);
 
   Expression _generateRequest(MethodElement method, ConstantReader annot) {
     final code = Code("'${annot.peek('method').stringValue}'");
@@ -225,16 +234,9 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
     return kReflutterRequestRef.call([], params).assignVar(kRequest);
   }
 
-  Expression _generateInterceptRequest() =>
+  Expression _generateInterceptRequest(
+          MethodElement method, ConstantReader annot) =>
       kRequestRef.assign(kInterceptReqRef.call([kRequestRef]).awaited);
-
-  Expression _generateInterceptResponseReturn(MethodElement m) {
-    return kInterceptResRef
-        .call([kResponseRef])
-        .awaited
-        .asA(_genericTypeBuilder(m.returnType))
-        .returned;
-  }
 
   Expression _generateSendRequest() => kRequestRef
       .property(kSendMethod)
@@ -242,7 +244,14 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
       .awaited
       .assignFinal(kRawResponse);
 
-  CodeExpression _generateResponseProcess(MethodElement method) {
+  Code _generateErrorCheck() {
+    return const Code(
+        '''if (!ReflutterApiDefinition.responseSuccessful(rawResponse)) {
+      return ReflutterResponse(null, rawResponse);
+    }''');
+  }
+
+  Expression _generateResponseProcess(MethodElement method) {
     final responseType = getResponseType(method.returnType);
     final respTypeName = responseType?.displayName;
     final type = _genericOf(responseType)?.displayName;
@@ -252,26 +261,23 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
           'Method return types should be of type ReflutterResponse. Instead, got $respTypeName<$type>');
     }
 
-    String responseCode;
+    String response;
     if (responseType.displayName.contains('List<'))
-      responseCode =
-          'ReflutterResponse($type.from(json.decode(rawResponse.body) as Iterable), rawResponse)';
+      response =
+          'ReflutterResponse($type.from(json.decode(rawResponse.body) as Iterable), rawResponse);';
     else
-      responseCode =
-          'ReflutterResponse($type.fromJson(json.decode(rawResponse.body) as Map<String, String>), rawResponse)';
+      response =
+          'ReflutterResponse($type.fromJson(json.decode(rawResponse.body) as Map<String, dynamic>), rawResponse);';
     if (type == 'dynamic') {
-      responseCode = 'ReflutterResponse.empty(rawResponse)';
+      response = 'ReflutterResponse.empty(rawResponse);';
     }
 
-    final block = Block.of([
-      Code(
-          'if (ReflutterApiDefinition.responseSuccessful(rawResponse)) {response = $responseCode;}'),
-      const Code(
-          'else {response = ReflutterResponse.error(rawResponse, rawResponse.reasonPhrase);}')
-    ]);
-
-    return CodeExpression(block);
+    final resp = CodeExpression(Code(response));
+    return resp.assignFinal(kResponse);
   }
+
+  Expression _generateReturnValue(MethodElement method, ConstantReader annot) =>
+      kInterceptResRef.call([kResponseRef]).awaited.returned;
 
   @meta.visibleForTesting
   DartType getResponseType(DartType type) {
