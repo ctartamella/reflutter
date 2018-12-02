@@ -14,8 +14,11 @@ typedef ResponseInterceptor<T> = FutureOr<ReflutterResponse<T>> Function(
 /// string for use in a URL.
 String paramsToQueryUri(Map<String, String> params) {
   final pairs = <List<String>>[];
-  params.forEach((key, value) => pairs
-      .add([Uri.encodeQueryComponent(key), Uri.encodeQueryComponent(value)]));
+  params.forEach((key, value) {
+    if (value != null && value.isNotEmpty && value != 'null')
+      pairs.add(
+          [Uri.encodeQueryComponent(key), Uri.encodeQueryComponent(value)]);
+  });
 
   return pairs.map((pair) => '${pair[0]}=${pair[1]}').join('&');
 }

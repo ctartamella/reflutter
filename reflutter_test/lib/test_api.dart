@@ -18,8 +18,24 @@ class HealthResponse {
   Map<String, dynamic> toJson() => _$HealthResponseToJson(this);
 }
 
+@JsonSerializable()
+class UserResponse {
+  final List<String> users;
+
+  UserResponse({this.users});
+
+  factory UserResponse.fromJson(Map<String, dynamic> json) =>
+      _$UserResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$UserResponseToJson(this);
+}
+
 @ReflutterHttp(name: 'TestApi')
 abstract class TestApiDefinition {
   @Get('/')
   Future<ReflutterResponse<HealthResponse>> healthcheck();
+
+  @Get('/users')
+  Future<ReflutterResponse<UserResponse>> listUsers(
+      {@QueryParam('sort_order') sortOrder,
+      @QueryParam('sort_field') sortField});
 }
