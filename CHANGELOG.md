@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.2
+
+- Fixed a bug where null or undefined query parameters were included in query strings.
+
 ## 0.5.1
 
 - Reintroduced request/response interceptors
