@@ -44,8 +44,8 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
       _log.info('${b.name}: Found ${b.methods.build().length} methods.');
     });
 
-    //return '${clazz.accept(DartEmitter())}';
-    return DartFormatter().format('${clazz.accept(DartEmitter())}');
+    return '${clazz.accept(DartEmitter())}';
+    //return DartFormatter().format('${clazz.accept(DartEmitter())}');
   }
 
   Method _generateMethod(MethodElement m) {
@@ -182,7 +182,7 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
       if (p.isNamed) {
         final pAnnot = _getQueryParamAnnotation(p);
         if (pAnnot != null) {
-          query[pAnnot?.peek('name')?.stringValue ?? p.name] = p.name;
+          query[pAnnot?.peek('name')?.stringValue ?? p.name] = refer(p.name).property('toString').call([]);
         }
       }
     }
@@ -227,8 +227,11 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
 
     for (var p in method.parameters) {
       final pAnnot = _getBodyAnnotation(p);
-      if (pAnnot != null) {
-        params[kBody] = kJsonRef.property('encode').call([refer(p.name)]);
+      if (!pAnnot.isNull) {
+        params[kBody] = refer(p.name).notEqualTo(literalNull).conditional(
+          kJsonRef.property('encode').call([refer(p.name)]), 
+          literalNull
+        );
       }
     }
     return kReflutterRequestRef.call([], params).assignVar(kRequest);

@@ -34,11 +34,7 @@ class TestApi extends ReflutterApiDefinition implements TestApiDefinition {
       'sort_field': '$sortField',
     });
     final url = '$baseUrl/users?$queryStr';
-    var request = ReflutterRequest(
-        method: 'GET',
-        url: url,
-        headers: headers,
-        body: json.encode(sortField));
+    var request = ReflutterRequest(method: 'GET', url: url, headers: headers);
     request = await interceptRequest(request);
     final rawResponse = await request.send(client);
     if (!ReflutterApiDefinition.responseSuccessful(rawResponse)) {

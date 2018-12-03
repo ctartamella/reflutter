@@ -13,8 +13,7 @@ class Api extends ReflutterApiDefinition implements ApiDefinition {
   @override
   Future<ReflutterResponse<User>> getUserById(String id) async {
     final url = '$baseUrl/users/$id';
-    var request = ReflutterRequest(
-        method: 'GET', url: url, headers: headers, body: json.encode(id));
+    var request = ReflutterRequest(method: 'GET', url: url, headers: headers);
     request = await interceptRequest(request);
     final rawResponse = await request.send(client);
     if (!ReflutterApiDefinition.responseSuccessful(rawResponse)) {
@@ -30,7 +29,10 @@ class Api extends ReflutterApiDefinition implements ApiDefinition {
   Future<ReflutterResponse<User>> postUser(User user) async {
     final url = '$baseUrl/users';
     var request = ReflutterRequest(
-        method: 'POST', url: url, headers: headers, body: json.encode(user));
+        method: 'POST',
+        url: url,
+        headers: headers,
+        body: user != null ? json.encode(user) : null);
     request = await interceptRequest(request);
     final rawResponse = await request.send(client);
     if (!ReflutterApiDefinition.responseSuccessful(rawResponse)) {
@@ -46,7 +48,10 @@ class Api extends ReflutterApiDefinition implements ApiDefinition {
   Future<ReflutterResponse<User>> updateUser(String userId, User user) async {
     final url = '$baseUrl/users/$userId';
     var request = ReflutterRequest(
-        method: 'PUT', url: url, headers: headers, body: json.encode(user));
+        method: 'PUT',
+        url: url,
+        headers: headers,
+        body: user != null ? json.encode(user) : null);
     request = await interceptRequest(request);
     final rawResponse = await request.send(client);
     if (!ReflutterApiDefinition.responseSuccessful(rawResponse)) {
@@ -61,8 +66,8 @@ class Api extends ReflutterApiDefinition implements ApiDefinition {
   @override
   Future<ReflutterResponse<dynamic>> deleteUser(String id) async {
     final url = '$baseUrl/users/$id';
-    var request = ReflutterRequest(
-        method: 'DELETE', url: url, headers: headers, body: json.encode(id));
+    var request =
+        ReflutterRequest(method: 'DELETE', url: url, headers: headers);
     request = await interceptRequest(request);
     final rawResponse = await request.send(client);
     if (!ReflutterApiDefinition.responseSuccessful(rawResponse)) {
@@ -80,8 +85,7 @@ class Api extends ReflutterApiDefinition implements ApiDefinition {
       'e': '$email',
     });
     final url = '$baseUrl/users?$queryStr';
-    var request = ReflutterRequest(
-        method: 'GET', url: url, headers: headers, body: json.encode(email));
+    var request = ReflutterRequest(method: 'GET', url: url, headers: headers);
     request = await interceptRequest(request);
     final rawResponse = await request.send(client);
     if (!ReflutterApiDefinition.responseSuccessful(rawResponse)) {
