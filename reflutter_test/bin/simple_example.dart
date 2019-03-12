@@ -23,28 +23,33 @@ class User {
 /// definition
 @ReflutterHttp(name: 'Api')
 abstract class ApiDefinition {
+  @Get('/users')
+  Future<List<User>> getUsers();
+
   @Get('/users/:id')
-  Future<ReflutterResponse<User>> getUserById(@Param() String id);
+  Future<User> getUserById(@Param() String id);
 
   @Post('/users')
-  Future<ReflutterResponse<User>> postUser(@Body() User user);
+  Future<User> postUser(@Body() User user);
 
   @Put('/users/:uid')
-  Future<ReflutterResponse<User>> updateUser(
-      @Param('uid') String userId, @Body() User user);
+  Future<User> updateUser(
+    @Param('uid') String userId, @Body() User user
+  );
 
   @Delete('/users/:id')
-  Future<ReflutterResponse> deleteUser(@Param() String id);
+  Future deleteUser(@Param() String id);
 
   @Get('/users')
-  Future<ReflutterResponse<List<User>>> search(
-      {@QueryParam('n') String name = 'John Doe',
-      @QueryParam('e') String email});
+  Future<List<User>> search({
+    @QueryParam('n') String name = 'John Doe',
+    @QueryParam('e') String email
+  });
 }
 
 void main() async {
   final api = Api(Client(), 'http://localhost');
   final user = await api.getUserById('1');
 
-  print('Username ${user.body.name}');
+  print('Username ${user.name}');
 }

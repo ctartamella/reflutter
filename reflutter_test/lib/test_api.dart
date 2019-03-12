@@ -32,10 +32,10 @@ class UserResponse {
 @ReflutterHttp(name: 'TestApi')
 abstract class TestApiDefinition {
   @Get('/')
-  Future<ReflutterResponse<HealthResponse>> healthcheck();
+  Future<HealthResponse> healthcheck();
 
   @Get('/users')
-  Future<ReflutterResponse<UserResponse>> listUsers(
+  Future<UserResponse> listUsers(
       {@QueryParam('sort_order') sortOrder,
       @QueryParam('sort_field') sortField});
 }

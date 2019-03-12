@@ -247,37 +247,42 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
   Code _generateErrorCheck() {
     return const Code(
         '''if (!ReflutterApiDefinition.responseSuccessful(rawResponse)) {
-      return ReflutterResponse(null, rawResponse);
+      return null;
     }''');
   }
 
   Expression _generateResponseProcess(MethodElement method) {
-    final responseType = getResponseType(method.returnType);
-    final respTypeName = responseType?.displayName;
-    final type = _genericOf(responseType)?.displayName;
-
-    if (!respTypeName.startsWith('ReflutterResponse')) {
-      throw Exception(
-          'Method return types should be of type ReflutterResponse. Instead, got $respTypeName<$type>');
-    }
-
     String response;
-    if (responseType.displayName.contains('List<'))
-      response =
-          'ReflutterResponse($type.from(json.decode(rawResponse.body) as Iterable), rawResponse);';
-    else
-      response =
-          'ReflutterResponse($type.fromJson(json.decode(rawResponse.body) as Map<String, dynamic>), rawResponse);';
-    if (type == 'dynamic') {
-      response = 'ReflutterResponse.empty(rawResponse);';
-    }
+    final responseType = getResponseType(method.returnType);
+        
+    if (responseType == null) 
+      response = 'rawResponse;';
+    else {
+      final type = responseType?.displayName;
+
+      if (responseType.displayName.contains('List<'))
+        response =
+            '$type.from(json.decode(rawResponse.body) as Iterable);';
+      else
+        response =
+            '$type.fromJson(json.decode(rawResponse.body) as Map<String, dynamic>);';
+      if (type == 'dynamic') {
+        response = 'ReflutterResponse.empty(rawResponse);';
+      }
+    }    
 
     final resp = CodeExpression(Code(response));
     return resp.assignFinal(kResponse);
   }
 
-  Expression _generateReturnValue(MethodElement method, ConstantReader annot) =>
-      kInterceptResRef.call([kResponseRef]).awaited.returned;
+  Expression _generateReturnValue(MethodElement method, ConstantReader annot) {
+    final type = method.returnType;
+    final expr = kInterceptResRef.call([kResponseRef]).awaited;
+
+    return type is InterfaceType && type.typeArguments.isEmpty ?
+      expr :
+      expr.returned;
+  }
 
   @meta.visibleForTesting
   DartType getResponseType(DartType type) {

@@ -7,8 +7,7 @@ typedef RequestInterceptor<T> = FutureOr<ReflutterRequest<T>> Function(
     ReflutterRequest<T> request);
 
 /// Typedef to define a [ResponseInterceptor] method.
-typedef ResponseInterceptor<T> = FutureOr<ReflutterResponse<T>> Function(
-    ReflutterResponse<T> response);
+typedef ResponseInterceptor<T> = FutureOr<T> Function(T response);
 
 /// Convert a [Map<String, String>] to a formatted query
 /// string for use in a URL.
@@ -104,33 +103,6 @@ class Patch extends _Req {
   const Patch([String url = '/']) : super('PATCH', url);
 }
 
-/// Defines the default wrapper for responses from the Reflutter generated API.
-/// This should be used for all API calls and should wrap whatver object type [T]
-/// that you expect from the call.
-class ReflutterResponse<T> {
-  final T body;
-  final http.Response rawResponse;
-  final String errorMessage;
-
-  /// Generate a response for the given body and raw HTTP response.
-  ReflutterResponse(this.body, this.rawResponse) : errorMessage = null;
-
-  ReflutterResponse.empty(this.rawResponse)
-      : body = null,
-        errorMessage = null;
-
-  /// Generates a response indicating an error condition
-  /// with the given response.
-  ReflutterResponse.error(this.rawResponse, this.errorMessage) : body = null;
-
-  /// Defines whether the response indicates success.
-  bool isSuccessful() =>
-      rawResponse.statusCode >= 200 && rawResponse.statusCode < 300;
-
-  @override
-  String toString() => 'RefitResponse($body)';
-}
-
 /// This class is not really intended for external use.  It is public
 /// only because it will get used by generated code.
 class ReflutterRequest<T> {
@@ -222,11 +194,10 @@ abstract class ReflutterApiDefinition {
   /// call gets the object as returned from the previous [ResponseInterceptor]
   /// and is similar to a pipeline.
   @protected
-  FutureOr<ReflutterResponse<T>> interceptResponse<T>(
-      ReflutterResponse<T> response) async {
+  FutureOr<T> interceptResponse<T>(T response) async {
     var localresponse = response;
     for (var i in responseInterceptors) {
-      localresponse = await i(localresponse) as ReflutterResponse<T>;
+      localresponse = await i(localresponse) as T;
     }
     return localresponse;
   }
