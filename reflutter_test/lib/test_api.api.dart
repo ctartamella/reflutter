@@ -11,24 +11,21 @@ class TestApi extends ReflutterApiDefinition implements TestApiDefinition {
       : super(client, baseUrl, headers);
 
   @override
-  Future<ReflutterResponse<HealthResponse>> healthcheck() async {
+  Future<HealthResponse> healthcheck() async {
     final url = '$baseUrl/';
     var request = ReflutterRequest(method: 'GET', url: url, headers: headers);
     request = await interceptRequest(request);
     final rawResponse = await request.send(client);
     if (!ReflutterApiDefinition.responseSuccessful(rawResponse)) {
-      return ReflutterResponse(null, rawResponse);
+      return null;
     }
-    final response = ReflutterResponse(
-        HealthResponse.fromJson(
-            json.decode(rawResponse.body) as Map<String, dynamic>),
-        rawResponse);
+    final response = HealthResponse.fromJson(
+        json.decode(rawResponse.body) as Map<String, dynamic>);
     return await interceptResponse(response);
   }
 
   @override
-  Future<ReflutterResponse<UserResponse>> listUsers(
-      {dynamic sortOrder, dynamic sortField}) async {
+  Future<UserResponse> listUsers({dynamic sortOrder, dynamic sortField}) async {
     final queryStr = paramsToQueryUri({
       'sort_order': '$sortOrder',
       'sort_field': '$sortField',
@@ -42,12 +39,10 @@ class TestApi extends ReflutterApiDefinition implements TestApiDefinition {
     request = await interceptRequest(request);
     final rawResponse = await request.send(client);
     if (!ReflutterApiDefinition.responseSuccessful(rawResponse)) {
-      return ReflutterResponse(null, rawResponse);
+      return null;
     }
-    final response = ReflutterResponse(
-        UserResponse.fromJson(
-            json.decode(rawResponse.body) as Map<String, dynamic>),
-        rawResponse);
+    final response = UserResponse.fromJson(
+        json.decode(rawResponse.body) as Map<String, dynamic>);
     return await interceptResponse(response);
   }
 }

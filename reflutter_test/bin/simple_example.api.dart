@@ -11,70 +11,79 @@ class Api extends ReflutterApiDefinition implements ApiDefinition {
       : super(client, baseUrl, headers);
 
   @override
-  Future<ReflutterResponse<User>> getUserById(String id) async {
+  Future<List<User>> getUsers() async {
+    final url = '$baseUrl/users';
+    var request = ReflutterRequest(method: 'GET', url: url, headers: headers);
+    request = await interceptRequest(request);
+    final rawResponse = await request.send(client);
+    if (!ReflutterApiDefinition.responseSuccessful(rawResponse)) {
+      return null;
+    }
+    final response = List<User>.from(json.decode(rawResponse.body) as Iterable);
+    return await interceptResponse(response);
+  }
+
+  @override
+  Future<User> getUserById(String id) async {
     final url = '$baseUrl/users/$id';
     var request = ReflutterRequest(
         method: 'GET', url: url, headers: headers, body: json.encode(id));
     request = await interceptRequest(request);
     final rawResponse = await request.send(client);
     if (!ReflutterApiDefinition.responseSuccessful(rawResponse)) {
-      return ReflutterResponse(null, rawResponse);
+      return null;
     }
-    final response = ReflutterResponse(
-        User.fromJson(json.decode(rawResponse.body) as Map<String, dynamic>),
-        rawResponse);
+    final response =
+        User.fromJson(json.decode(rawResponse.body) as Map<String, dynamic>);
     return await interceptResponse(response);
   }
 
   @override
-  Future<ReflutterResponse<User>> postUser(User user) async {
+  Future<User> postUser(User user) async {
     final url = '$baseUrl/users';
     var request = ReflutterRequest(
         method: 'POST', url: url, headers: headers, body: json.encode(user));
     request = await interceptRequest(request);
     final rawResponse = await request.send(client);
     if (!ReflutterApiDefinition.responseSuccessful(rawResponse)) {
-      return ReflutterResponse(null, rawResponse);
+      return null;
     }
-    final response = ReflutterResponse(
-        User.fromJson(json.decode(rawResponse.body) as Map<String, dynamic>),
-        rawResponse);
+    final response =
+        User.fromJson(json.decode(rawResponse.body) as Map<String, dynamic>);
     return await interceptResponse(response);
   }
 
   @override
-  Future<ReflutterResponse<User>> updateUser(String userId, User user) async {
+  Future<User> updateUser(String userId, User user) async {
     final url = '$baseUrl/users/$userId';
     var request = ReflutterRequest(
         method: 'PUT', url: url, headers: headers, body: json.encode(user));
     request = await interceptRequest(request);
     final rawResponse = await request.send(client);
     if (!ReflutterApiDefinition.responseSuccessful(rawResponse)) {
-      return ReflutterResponse(null, rawResponse);
+      return null;
     }
-    final response = ReflutterResponse(
-        User.fromJson(json.decode(rawResponse.body) as Map<String, dynamic>),
-        rawResponse);
+    final response =
+        User.fromJson(json.decode(rawResponse.body) as Map<String, dynamic>);
     return await interceptResponse(response);
   }
 
   @override
-  Future<ReflutterResponse<dynamic>> deleteUser(String id) async {
+  Future<dynamic> deleteUser(String id) async {
     final url = '$baseUrl/users/$id';
     var request = ReflutterRequest(
         method: 'DELETE', url: url, headers: headers, body: json.encode(id));
     request = await interceptRequest(request);
     final rawResponse = await request.send(client);
     if (!ReflutterApiDefinition.responseSuccessful(rawResponse)) {
-      return ReflutterResponse(null, rawResponse);
+      return null;
     }
-    final response = ReflutterResponse.empty(rawResponse);
+    final response = rawResponse;
     return await interceptResponse(response);
   }
 
   @override
-  Future<ReflutterResponse<List<User>>> search(
-      {String name: 'John Doe', String email}) async {
+  Future<List<User>> search({String name = 'John Doe', String email}) async {
     final queryStr = paramsToQueryUri({
       'n': '$name',
       'e': '$email',
@@ -85,11 +94,9 @@ class Api extends ReflutterApiDefinition implements ApiDefinition {
     request = await interceptRequest(request);
     final rawResponse = await request.send(client);
     if (!ReflutterApiDefinition.responseSuccessful(rawResponse)) {
-      return ReflutterResponse(null, rawResponse);
+      return null;
     }
-    final response = ReflutterResponse(
-        List<User>.from(json.decode(rawResponse.body) as Iterable),
-        rawResponse);
+    final response = List<User>.from(json.decode(rawResponse.body) as Iterable);
     return await interceptResponse(response);
   }
 }

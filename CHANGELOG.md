@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.6.0
+
+- Simplified the API by removing the ```ReflutterResponse``` object.  Methods now only need
+    return ```Future<T>``` or ```Future<List<T>>```.
+
 ## 0.5.2
 
 - Fixed a bug where null or undefined query parameters were included in query strings.
