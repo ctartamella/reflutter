@@ -52,8 +52,8 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
     final methodAnnot = _getMethodAnnotation(m);
     if (methodAnnot == null ||
         !m.isAbstract ||
-        !m.returnType.isDartAsyncFuture) {
-      _log.warning('Skipping method ${m.name}');
+        !m.returnType.toString().startsWith('Future')) {
+      _log.warning('Skipping method ${m.name} with return type ${m.returnType}');
       return null;
     }
 
