@@ -19,7 +19,9 @@ class Api extends ReflutterApiDefinition implements ApiDefinition {
     if (!ReflutterApiDefinition.responseSuccessful(rawResponse)) {
       return null;
     }
-    final response = List<User>.from(json.decode(rawResponse.body) as Iterable);
+    final response = (json.decode(rawResponse.body) as Iterable<User>)
+        .map((m) => User.fromJson(m as Map<String, dynamic>))
+        .toList();
     return await interceptResponse(response);
   }
 
@@ -96,7 +98,9 @@ class Api extends ReflutterApiDefinition implements ApiDefinition {
     if (!ReflutterApiDefinition.responseSuccessful(rawResponse)) {
       return null;
     }
-    final response = List<User>.from(json.decode(rawResponse.body) as Iterable);
+    final response = (json.decode(rawResponse.body) as Iterable<User>)
+        .map((m) => User.fromJson(m as Map<String, dynamic>))
+        .toList();
     return await interceptResponse(response);
   }
 }
