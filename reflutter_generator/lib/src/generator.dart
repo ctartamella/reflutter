@@ -25,7 +25,7 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
           'Generator cannot target `$friendlyName`.');
     }
 
-    final ClassElement classElement = element;
+    final classElement = element as ClassElement;
     _log.info('Processing class ${classElement.name}.');
 
     final clazz = Class((b) {
@@ -260,9 +260,12 @@ class ReflutterHttpGenerator extends GeneratorForAnnotation<ReflutterHttp> {
     else {
       final type = responseType?.displayName;
 
-      if (responseType.displayName.contains('List<'))
+      if (responseType.displayName.contains('List<')) {
+        final itemType =_genericOf(responseType)?.displayName;
+
         response =
-            '$type.from(json.decode(rawResponse.body) as Iterable);';
+            '(json.decode(rawResponse.body) as Iterable<$itemType>).map((m) => $itemType.fromJson(m as Map<String,dynamic>)).toList();';
+      }
       else
         response =
             '$type.fromJson(json.decode(rawResponse.body) as Map<String, dynamic>);';
